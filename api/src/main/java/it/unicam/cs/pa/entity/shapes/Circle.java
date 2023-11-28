@@ -1,5 +1,14 @@
 package it.unicam.cs.pa.entity.shapes;
 
-public class Circle implements Shape {
+public final class Circle implements Shape {
 
+    @Override
+    public double[] getProperties() {
+        return new double[0];
+    }
+
+    @Override
+    public boolean isContained() {
+        return false;
+    }
 }
