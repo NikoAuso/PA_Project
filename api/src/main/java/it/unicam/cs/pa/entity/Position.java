@@ -1,28 +1,25 @@
 package it.unicam.cs.pa.entity;
 
-public class Position {
-    private double x;
+import java.util.random.RandomGenerator;
 
-    private double y;
+public final class Position {
+    private final double x;
+
+    private final double y;
 
     public Position(double x, double y) {
+        if (!(x > 0 && y > 0))
+            throw new RuntimeException("The position value must be positive");
         this.x = x;
         this.y = y;
     }
 
-    public double getX() {
-        return x;
+    public Position(Position p) {
+        this.x = p.x;
+        this.y = p.y;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
+    public static Position random() {
+        return new Position(RandomGenerator.getDefault().nextDouble(), RandomGenerator.getDefault().nextDouble());
     }
 }
