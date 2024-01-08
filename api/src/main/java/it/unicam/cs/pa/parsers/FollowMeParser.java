@@ -1,4 +1,4 @@
-package it.unicam.cs.pa;
+package it.unicam.cs.pa.parsers;
 
 import java.io.File;
 import java.io.IOException;

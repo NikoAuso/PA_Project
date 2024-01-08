@@ -1,4 +1,4 @@
-package it.unicam.cs.pa;
+package it.unicam.cs.pa.parsers;
 
 public class FollowMeParserException extends Exception {
     public FollowMeParserException(String message) {

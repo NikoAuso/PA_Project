@@ -1,4 +1,4 @@
-package it.unicam.cs.pa;
+package it.unicam.cs.pa.parsers;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -28,5 +28,4 @@ public enum RobotCommand {
     static Optional<RobotCommand> selectCommand(String line) {
         return Stream.of(RobotCommand.values()).filter(c -> c.isCommandOfLine(line)).findFirst();
     }
-
 }

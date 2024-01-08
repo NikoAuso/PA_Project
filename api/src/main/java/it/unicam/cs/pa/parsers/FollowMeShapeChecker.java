@@ -1,4 +1,4 @@
-package it.unicam.cs.pa;
+package it.unicam.cs.pa.parsers;
 
 import java.util.stream.IntStream;
 

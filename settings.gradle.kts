@@ -12,5 +12,4 @@ plugins {
 
 rootProject.name = "RobotSwarm"
 include("api")
-include("utils")
 include("app")

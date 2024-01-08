@@ -1,4 +1,4 @@
-package it.unicam.cs.pa;
+package it.unicam.cs.pa.parsers;
 
 /**
  * This interface is implemented to handle parsing of robot programs. Instances of this interface
@@ -10,18 +10,15 @@ package it.unicam.cs.pa;
  * </ol>
  *
  * @see FollowMeParser
- *
  */
 public interface FollowMeParserHandler {
-
-
     /**
-     * This method is the method that is invoked ad the beginning of the parse procedure.
+     * This method is the method that is invoked at the beginning of the parse procedure.
      */
     void parsingStarted();
 
     /**
-     * This method is the method that is invoked ad the end of the parse procedure.
+     * This method is the method that is invoked at the end of the parse procedure.
      */
     void parsingDone();
 
@@ -57,7 +54,7 @@ public interface FollowMeParserHandler {
      * Method invoked when a command "FOLLOW" is parsed.
      *
      * @param label label to follow
-     * @param args command arguments
+     * @param args  command arguments
      */
     void followCommand(String label, double[] args);
 
