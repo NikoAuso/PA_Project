@@ -3,29 +3,29 @@ package it.unicam.cs.pa.entities.shapes;
 import it.unicam.cs.pa.entities.Position;
 
 /**
- * Describe the rectangular shape in the environment
- *
- * @param center center coordinate of the shape
- * @param height height of the rectangular shape
- * @param width  width of the rectangular shape
+ * A record representing a rectangle in a 2D space. The rectangle is defined by its center, height, and width.
+ * The class implements the Shape interface, providing methods for containment check, equality comparison,
+ * hash code generation, and a string representation of the rectangle.
  */
-public record Rectangle(Position center, double height, double width) implements Shape {
+public record Rectangle(Position center, double height, double width, String label) implements Shape {
     /**
-     * Rectangle constructor from values
+     * Constructs a Rectangle with the specified center, height, and width. Throws a ShapeException if
+     * the height or width is not a positive value.
      *
-     * @param center center coordinate of the shape
-     * @param height height of the rectangle
-     * @param width  width of the rectangle
+     * @param center The center position of the rectangle.
+     * @param height The height of the rectangle.
+     * @param width The width of the rectangle.
+     * @throws ShapeException if height or width is not a positive value.
      */
-    public Rectangle(Position center, double height, double width) {
+    public Rectangle(Position center, double height, double width, String label) {
         if (height > 0 && width > 0) {
             this.center = center;
             this.height = height;
             this.width = width;
+            this.label = label;
         } else
             throw new ShapeException("Height and width of the rectangle must be a positive value.");
     }
-
 
     @Override
     public boolean contains(Position toCheckPosition) {
@@ -39,7 +39,7 @@ public record Rectangle(Position center, double height, double width) implements
     }
 
     @Override
-    public boolean equals(Object s) {
+    public boolean equals(Shape s) {
         if (s == this) {
             return true;
         } else if (!(s instanceof Rectangle r)) {
@@ -53,21 +53,13 @@ public record Rectangle(Position center, double height, double width) implements
     }
 
     @Override
-    public int hashCode() {
-        long bits = Double.doubleToLongBits(this.center().x());
-        bits += Double.doubleToLongBits(this.center().y()) * 37L;
-        bits += Double.doubleToLongBits(this.width()) * 43L;
-        bits += Double.doubleToLongBits(this.height()) * 47L;
-        return (int) bits ^ (int) (bits >> 32);
-    }
-
-    @Override
     public String toString() {
-        String description = this.getClass().getName();
-        return description +
-                "Shape: Rectangle->[X=" + this.center().x() + "," +
-                "Y=" + this.center().y() + "," +
-                "W=" + this.width() + "," +
-                "H=" + this.height() + "]";
+        String description = this.getClass().getSimpleName();
+        return "Shape: " + description + "->[" +
+                "X=" + this.center().x() + ", " +
+                "Y=" + this.center().y() + ", " +
+                "W=" + this.width() + ", " +
+                "H=" + this.height() + ", " +
+                "Label=" + this.label() + "]";
     }
 }

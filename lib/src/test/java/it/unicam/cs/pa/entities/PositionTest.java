@@ -1,25 +1,18 @@
 package it.unicam.cs.pa.entities;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-import java.util.random.RandomGenerator;
-
 class PositionTest {
     private Position position;
 
-    @BeforeEach
-    void setUp() {
-        position = new Position(1.0, 2.0);
-    }
-
-    @Test
-    void testPositionConstruction() {
-        double x = RandomGenerator.getDefault().nextDouble();
-        double y = RandomGenerator.getDefault().nextDouble();
+    @BeforeAll
+    static void testPositionConstruction() {
+        double x = Math.random() * Double.MAX_VALUE;
+        double y = Math.random() * Double.MAX_VALUE;
 
         assertDoesNotThrow(() -> {
             Position position = new Position(x, y);
@@ -28,6 +21,11 @@ class PositionTest {
             assertEquals(y, position.y());
         });
         assertThrows(PositionException.class, () -> new Position(-1.0, 2.0));
+    }
+
+    @BeforeEach
+    void setUp() {
+        position = new Position(1.0, 2.0);
     }
 
     @Test
@@ -54,21 +52,6 @@ class PositionTest {
             assertFalse(wrong_position.equals(equals_position));
             assertFalse(equals_position.equals(wrong_position));
         });
-    }
-
-    @Test
-    void testGenerateRandomPositionsMethod() {
-        int numberOfPositions = 10;
-
-        assertDoesNotThrow(() -> {
-            List<Position> randomPositions = Position.generateRandomPositions(numberOfPositions);
-            assertNotNull(randomPositions);
-            assertEquals(numberOfPositions, randomPositions.size());
-            for (Position position : randomPositions) {
-                assertNotNull(position);
-            }
-        });
-        assertThrows(PositionException.class, () -> Position.generateRandomPositions(-1));
     }
 
     @Test

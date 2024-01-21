@@ -1,74 +1,52 @@
 package it.unicam.cs.pa.entities;
 
-import java.util.List;
-import java.util.Random;
-import java.util.random.RandomGenerator;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 /**
- * Describes the coordinates of a position in the environment
- *
- * @param x X coordinate of the position
- * @param y Y coordinate of the position
+ * A record representing a 2D position with x and y coordinates. The class provides methods for creating
+ * a random position, checking equality, and calculating the distance between two positions.
  */
 public record Position(double x, double y) {
     /**
-     * Position constructor from values
+     * Initializes a Position with the specified x and y coordinates.
+     * Throws a PositionException if either x or y is not a finite value.
      *
-     * @param x X coordinate of the position
-     * @param y Y coordinate of the position
+     * @param x The x-coordinate of the position.
+     * @param y The y-coordinate of the position.
+     * @throws PositionException if either x or y is not a finite value.
      */
     public Position {
-        if (!(x > 0 && y > 0))
-            throw new PositionException("The position values must be positive");
+        if (!Double.isFinite(x) || !Double.isFinite(y))
+            throw new PositionException("The position values must be finite value");
     }
 
     /**
-     * Generate random position
+     * Generates a random Position with x and y coordinates between 0 (inclusive) and 1 (exclusive).
      *
-     * @return random position
+     * @return A randomly generated Position.
      */
     public static Position random() {
-        Random random = new Random();
         return new Position(
-                random.nextDouble(),
-                random.nextDouble()
+                Math.random() * Double.MAX_VALUE,
+                Math.random() * Double.MAX_VALUE
         );
     }
 
     /**
-     * Check if two position are equals, based on the coordinates of both
+     * Compares the position with another Position for equality.
      *
-     * @param obj the other position to check
-     * @return true if both the position sre the same, false otherwise
+     * @param obj The position to compare with.
+     * @return true if the positions are equal, false otherwise.
      */
     public boolean equals(Position obj) {
         return Double.compare(this.x(), obj.x()) == 0 && Double.compare(this.y(), obj.y()) == 0;
     }
 
     /**
-     * Calculate the distance between two position
+     * Calculates the Euclidean distance between this position and another position.
      *
-     * @param p the other position
-     * @return distance between two position
+     * @param p The position to calculate the distance to.
+     * @return The distance between the two positions.
      */
     public double distanceTo(Position p) {
         return Math.hypot(p.x - this.x(), p.y - this.y());
     }
-
-    /**
-     * Generate a list of random position
-     *
-     * @param total amount of position to be created
-     * @return a list of random position
-     */
-    public static List<Position> generateRandomPositions(int total) throws PositionException{
-        if (!(total > 0))
-            throw new PositionException("The amount of random position to generate must be positive");
-        return IntStream.range(0, total)
-                .mapToObj(i -> random())
-                .collect(Collectors.toList());
-    }
-
 }

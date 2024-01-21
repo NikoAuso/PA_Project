@@ -3,22 +3,24 @@ package it.unicam.cs.pa.entities.shapes;
 import it.unicam.cs.pa.entities.Position;
 
 /**
- * Describe the circular shape in the environment
- *
- * @param center center of the circular shape
- * @param radius radius of the circular shape
+ * A record representing a circle in a 2D space. The circle is defined by its center and radius.
+ * The class implements the Shape interface, providing methods for containment check, equality comparison,
+ * and a string representation of the circle.
  */
-public record Circle(Position center, double radius) implements Shape {
+public record Circle(Position center, double radius, String label) implements Shape {
     /**
-     * Circle constructor from values
+     * Constructs a Circle with the specified center and radius. Throws a ShapeException if
+     * the radius is not a positive value.
      *
-     * @param center the center coordinate of the shape
-     * @param radius the radius of the circle
+     * @param center The center position of the circle.
+     * @param radius The radius of the circle.
+     * @throws ShapeException if the radius is not a positive value.
      */
-    public Circle(Position center, double radius) {
+    public Circle(Position center, double radius, String label) {
         if (radius > 0) {
             this.center = center;
             this.radius = radius;
+            this.label = label;
         } else
             throw new ShapeException("Radius of the circle must be a positive value.");
     }
@@ -30,7 +32,7 @@ public record Circle(Position center, double radius) implements Shape {
     }
 
     @Override
-    public boolean equals(Object s) {
+    public boolean equals(Shape s) {
         if (s == this) {
             return true;
         } else if (!(s instanceof Circle r)) {
@@ -43,20 +45,12 @@ public record Circle(Position center, double radius) implements Shape {
     }
 
     @Override
-    public int hashCode() {
-        long bits = Double.doubleToLongBits(this.center().x());
-        bits += Double.doubleToLongBits(this.center().y()) * 37L;
-        bits += Double.doubleToLongBits(this.radius()) * 43L;
-        return (int) bits ^ (int) (bits >> 32);
-    }
-
-    @Override
     public String toString() {
-        String description = this.getClass().getName();
-        return description +
-                "Shape: Circle->[X=" + this.center().x() + "," +
-                "Y=" + this.center().y() + "," +
-                "R=" + this.radius() + "]";
+        return "Shape: " + this.getClass().getSimpleName() + "->[" +
+                "X=" + this.center().x() + ", " +
+                "Y=" + this.center().y() + ", " +
+                "R=" + this.radius() + ", " +
+                "Label=" + this.label() + "]";
 
     }
 }
