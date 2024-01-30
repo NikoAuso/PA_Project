@@ -1,0 +1,6 @@
+label CIRCLE 1.0 1.0 1.0
+label CIRCLE 10.0 10.0 5
+label CIRCLE -1.0 -1.0 1
+label RECTANGLE -1 -1 1 1
+label RECTANGLE 2 3 3 1
+label RECTANGLE 5 5 4 4

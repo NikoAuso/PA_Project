@@ -4,11 +4,17 @@
 
 plugins {
     id("it.unicam.cs.pa.java-application-conventions")
+    id("org.openjfx.javafxplugin") version "0.1.+"
 }
 
 dependencies {
     implementation("org.apache.commons:commons-text")
     implementation(project(":lib"))
+}
+
+javafx {
+    version = "21"
+    modules("javafx.controls", "javafx.fxml")
 }
 
 application {

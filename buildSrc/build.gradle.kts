@@ -7,6 +7,12 @@ plugins {
     `kotlin-dsl`
 }
 
+java{
+    toolchain{
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 repositories {
     // Use the plugin portal to apply community plugins in convention plugins.
     gradlePluginPortal()
