@@ -33,12 +33,12 @@
 -->
 
 <?import javafx.geometry.*?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:id="window" fx:controller="it.unicam.cs.pa.app.SimulationController">
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="window" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.pa.app.SimulatorController">
     <SplitPane dividerPositions="0.2505567928730512, 0.5" focusTraversable="true" VBox.vgrow="ALWAYS">
         <AnchorPane maxWidth="200.0">
             <SplitPane dividerPositions="0.28859060402684567, 0.6577181208053692" orientation="VERTICAL" prefHeight="598.0" prefWidth="222.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -88,27 +88,29 @@
                     </VBox>
                 </AnchorPane>
                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                    <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="-2.0" layoutY="43.0" minWidth="60.0" prefHeight="50.0" prefWidth="198.0" style="&#10;" text="View controls" AnchorPane.bottomAnchor="182.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="-2.0" layoutY="43.0" prefHeight="50.0" style="&#10;" text="View controls" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     </Label>
-                    <Button layoutX="8.0" layoutY="76.0" mnemonicParsing="false" text="&lt;" accessibleText="Move left" />
-                    <Button layoutX="66.0" layoutY="76.0" mnemonicParsing="false" text="&gt;" accessibleText="Move right" />
-                    <Button layoutX="99.0" layoutY="92.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="91.0" text="Zoom in" accessibleText="Zoom in" />
-                    <Button layoutX="99.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="91.0" text="Zoom out" accessibleText="Zoom out" />
-                    <Button layoutX="37.0" layoutY="105.0" mnemonicParsing="false" rotate="180.0" text="^" accessibleText="Move down" />
-                    <Button layoutX="37.0" layoutY="47.0" mnemonicParsing="false" text="^" accessibleText="Move up" />
-                    <Button layoutX="37.0" layoutY="76.0" mnemonicParsing="false" text="o" accessibleText="Center view" />
+                    <Button fx:id="panLeftButton" accessibleText="Move left" layoutX="8.0" layoutY="91.0" mnemonicParsing="false" onAction="#handlePanLeftButton" text="&lt;" />
+                    <Button fx:id="panRightButton" accessibleText="Move right" layoutX="66.0" layoutY="91.0" mnemonicParsing="false" onAction="#handlePanRightButton" text="&gt;" />
+                    <Button fx:id="zoomOutButton" accessibleText="Zoom out" layoutX="99.0" layoutY="107.0" mnemonicParsing="false" onAction="#handleZoomOutButton" prefHeight="26.0" prefWidth="91.0" text="Zoom out" />
+                    <Button fx:id="zoomInButton" accessibleText="Zoom in" layoutX="99.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleZoomInButton" prefHeight="26.0" prefWidth="91.0" text="Zoom in" />
+                    <Button fx:id="panDownButton" accessibleText="Move down" layoutX="37.0" layoutY="120.0" mnemonicParsing="false" onAction="#handlePanDownButton" rotate="180.0" text="^" />
+                    <Button fx:id="panUpButton" accessibleText="Move up" layoutX="37.0" layoutY="62.0" mnemonicParsing="false" onAction="#handlePanUpButton" text="^" />
+                    <Button fx:id="panCenterButton" accessibleText="Center view" layoutX="37.0" layoutY="91.0" mnemonicParsing="false" onAction="#handlePanCenterButton" text="o" />
                 </AnchorPane>
             </SplitPane>
         </AnchorPane>
-        <AnchorPane maxWidth="500.0">
-            <ScatterChart fx:id="chart" prefHeight="598.0" prefWidth="486.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane>
+            <ScatterChart fx:id="chart" animated="false" layoutX="18.0" layoutY="74.0" maxHeight="450.0" maxWidth="450.0" minHeight="450.0" minWidth="450.0">
                 <xAxis>
-                    <NumberAxis side="BOTTOM" fx:id="xAxis"/>
+                    <NumberAxis side="BOTTOM" fx:id="xAxis" />
                 </xAxis>
                 <yAxis>
-                    <NumberAxis side="LEFT" fx:id="yAxis"/>
+                    <NumberAxis fx:id="yAxis" side="LEFT" />
                 </yAxis>
             </ScatterChart>
+         <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="176.0" prefHeight="50.0" style="&#10;" text="Simulation view">
+         </Label>
         </AnchorPane>
         <AnchorPane maxWidth="200.0" SplitPane.resizableWithParent="false">
             <Label alignment="CENTER" font="$mainLabel" layoutX="14.0" layoutY="14.0" prefHeight="50.0" prefWidth="200.0" style="&#10;" text="Details" textAlignment="CENTER" AnchorPane.bottomAnchor="571.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />

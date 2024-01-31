@@ -44,7 +44,7 @@ class PositionTest {
 
     @Test
     void testRandomPositionMethod() {
-        Position randomPosition = Position.random();
+        Position randomPosition = Position.random(10);
         assertDoesNotThrow(() -> {
             assertNotNull(randomPosition);
             assertTrue(randomPosition.x() >= -1e15 && randomPosition.x() <= 1e15);

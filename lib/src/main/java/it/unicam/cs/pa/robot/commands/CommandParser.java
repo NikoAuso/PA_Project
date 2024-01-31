@@ -16,8 +16,7 @@ import java.util.Optional;
  */
 public final class CommandParser {
     private int linecounter = 0;
-    private List<Command> commands;
-
+    private final List<Command> commands;
 
     public CommandParser() {
         this.commands = new ArrayList<>();
@@ -59,7 +58,7 @@ public final class CommandParser {
     }
 
     private void addForeverMethod(String[] elements) {
-        if (elements.length == 1) {
+        if (elements.length == 2) {
             commands.add(new DoForever());//TODO: implementare
         } else {
             throwSyntaxErrorException();
@@ -141,27 +140,25 @@ public final class CommandParser {
     }
 
     private void addMoveMethods(String[] elements) {
-        if (elements.length > 1) {
-            if (elements[1].equals("RANDOM")) {
-                if (elements.length == 7) {
-                    double[] args = toDoubleArray(2, elements);
-                    assert args != null;
-                    Position position1 = new Position(args[0], args[1]);
-                    Position position2 = new Position(args[2], args[3]);
-                    double speed = args[4];
-                    commands.add(new MoveRandom(position1, position2, speed));
-                } else
-                    throw new CommandException(String.format("Invalid input argument for instruction %s!", elements[0] + elements[1]));
-            } else {
-                if (elements.length == 4) {
-                    double[] args = toDoubleArray(1, elements);
-                    assert args != null;
-                    Position position = new Position(args[0], args[1]);
-                    double speed = args[2];
-                    commands.add(new Move(position, speed));
-                } else
-                    throw new CommandException(String.format("Invalid input argument for instruction %s!", elements[0]));
-            }
+        if (elements[1].equals("RANDOM")) {
+            if (elements.length == 7) {
+                double[] args = toDoubleArray(2, elements);
+                assert args != null;
+                Position position1 = new Position(args[0], args[1]);
+                Position position2 = new Position(args[2], args[3]);
+                double speed = args[4];
+                commands.add(new MoveRandom(position1, position2, speed));
+            } else
+                throw new CommandException("Invalid input argument for instruction MOVE RANDOM!");
+        } else {
+            if (elements.length == 4) {
+                double[] args = toDoubleArray(1, elements);
+                assert args != null;
+                Position position = new Position(args[0], args[1]);
+                double speed = args[2];
+                commands.add(new Move(position, speed));
+            } else
+                throw new CommandException("Invalid input argument for instruction MOVE!");
         }
     }
 
@@ -182,7 +179,7 @@ public final class CommandParser {
         throw new CommandException(String.format("Syntax error at line %d", linecounter));
     }
 
-    public List<Command> getCommands(){
+    public List<Command> getCommands() {
         return this.commands;
     }
 }

@@ -1,15 +1,17 @@
 package it.unicam.cs.pa.app;
 
+import it.unicam.cs.pa.SimulationController;
 import it.unicam.cs.pa.environment.Environment;
 import it.unicam.cs.pa.environment.EnvironmentException;
 import it.unicam.cs.pa.environment.EnvironmentParser;
 import it.unicam.cs.pa.environment.shapes.ShapeChecker;
+import it.unicam.cs.pa.robot.Robot;
 import it.unicam.cs.pa.robot.commands.CommandException;
 import it.unicam.cs.pa.robot.commands.CommandParser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ScatterChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -25,16 +27,16 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
-public class SimulationController {
-    private Environment environment;
+public class SimulatorController {
+    private SimulationController simulationController;
 
     private ChartController chartController;
 
     @FXML
-    private VBox window;
+    private Font mainLabel;
 
     @FXML
-    private Font mainLabel;
+    private VBox window;
 
     @FXML
     private Button loadShapeButton;
@@ -55,6 +57,27 @@ public class SimulationController {
     private Button resetButton;
 
     @FXML
+    public Button panLeftButton;
+
+    @FXML
+    public Button panRightButton;
+
+    @FXML
+    public Button panUpButton;
+
+    @FXML
+    public Button panDownButton;
+
+    @FXML
+    public Button panCenterButton;
+
+    @FXML
+    public Button zoomInButton;
+
+    @FXML
+    public Button zoomOutButton;
+
+    @FXML
     private TextArea programLoadedDetails;
 
     @FXML
@@ -64,7 +87,7 @@ public class SimulationController {
     private FileChooser fileChooser;
 
     @FXML
-    private ScatterChart<Number, Number> chart;
+    private XYChart<Number, Number> chart;
 
     @FXML
     private NumberAxis xAxis;
@@ -74,50 +97,37 @@ public class SimulationController {
 
     @FXML
     private void initialize() {
-        loadShapeButton.setDisable(false);
-        loadProgramButton.setDisable(false);
-        generateRobotsButton.setDisable(false);
-        startSimulation.setDisable(true);
-        startSimulationStepped.setDisable(true);
-        resetButton.setDisable(true);
-
-        environment = new Environment();
-
+        simulationController = new SimulationController();
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("*.txt", "*.txt"),
                 new FileChooser.ExtensionFilter("All Files", "*.*")
         );
-
-        chartController = new ChartController(chart, xAxis, yAxis);
+        chartController = new ChartController(chart, xAxis, yAxis, simulationController);
+        checkIfSimulationCanStart();
     }
 
     @FXML
-    private void handleLoadShapeButton(ActionEvent event) throws IOException {
-        fileChooser.setTitle("Load environment file");
-        Stage stage = (Stage) loadShapeButton.getScene().getWindow();
-        File selectedFile = fileChooser.showOpenDialog(stage);
-
+    private void handleLoadShapeButton(ActionEvent event) {
+        File selectedFile = showFileChooser("Load environment file");
         if (selectedFile != null && selectedFile.exists()) {
             if (selectedFile.length() > 0) {
                 if (loadDataFromFile(selectedFile)) {
                     updateShapeInfo(selectedFile);
-                    chartController.drawFigures(environment.getShapes());
+                    updateChart();
                 }
             } else
                 showAlert(Alert.AlertType.INFORMATION, "Info", "The selected file seems to be empty.");
         } else {
             showAlert(Alert.AlertType.WARNING, "Warning", "No file selected.");
         }
+        checkIfSimulationCanStart();
         event.consume();
     }
 
     @FXML
     private void handleLoadProgramButton(ActionEvent event) {
-        fileChooser.setTitle("Load program file");
-        Stage stage = (Stage) loadShapeButton.getScene().getWindow();
-        File selectedFile = fileChooser.showOpenDialog(stage);
-
+        File selectedFile = showFileChooser("Load program file");
         if (selectedFile != null && selectedFile.exists()) {
             if (selectedFile.length() > 0) {
                 if (loadProgramFormFile(selectedFile)) {
@@ -128,25 +138,20 @@ public class SimulationController {
         } else {
             showAlert(Alert.AlertType.WARNING, "Warning", "No file selected.");
         }
+        checkIfSimulationCanStart();
         event.consume();
     }
 
     @FXML
     private void handleGenerateRobotsButton(ActionEvent event) {
-        TextInputDialog td = new TextInputDialog();
-        td.setHeaderText("Enter the number of robots to spawn.");
-        td.initOwner(window.getScene().getWindow());
-        Optional<String> text = td.showAndWait();
-        int numRobots;
-        if (text.isPresent()) {
-            numRobots = text.map(Integer::parseInt).orElse(-1);
-            if (numRobots > 0) {
-                this.environment.generateRandomRobots(numRobots);
-                this.chartController.drawRobots(environment.getRobots());
-            }else
-                showAlert(Alert.AlertType.WARNING, "Warning", "You must define at least 1 robot to spawn");
-        } else
-            showAlert(Alert.AlertType.WARNING, "Warning", "No robots generated");
+        int n = showEnteringNumberDialog("Enter the number of robots to spawn.");
+        if (n > 0) {
+            this.simulationController.getEnvironment().getRobots().clear();
+            this.simulationController.getEnvironment().generateRandomRobots(n, ChartController.INITIAL_GRAPH_BOUND);
+            updateChart();
+        }
+        checkIfSimulationCanStart();
+        event.consume();
     }
 
     @FXML
@@ -163,8 +168,76 @@ public class SimulationController {
 
     @FXML
     private void handleResetButton(ActionEvent event) {
-        // Replace this with the actual action for resetting the simulation
-        System.out.println("Reset Button Clicked");
+        this.simulationController.getEnvironment().getRobots().clear();
+        this.simulationController.getEnvironment().getShapes().clear();
+        updateChart();
+        checkIfSimulationCanStart();
+    }
+
+    @FXML
+    private void handleZoomInButton(ActionEvent event) {
+        chartController.zoomIn();
+        event.consume();
+    }
+
+    @FXML
+    private void handleZoomOutButton(ActionEvent event) {
+        chartController.zoomOut();
+        event.consume();
+    }
+
+    @FXML
+    private void handlePanLeftButton(ActionEvent event) {
+        chartController.panLeft();
+        event.consume();
+    }
+
+    @FXML
+    private void handlePanRightButton(ActionEvent event) {
+        chartController.panRight();
+        event.consume();
+    }
+
+    @FXML
+    private void handlePanUpButton(ActionEvent event) {
+        chartController.panUp();
+        event.consume();
+    }
+
+    @FXML
+    private void handlePanDownButton(ActionEvent event) {
+        chartController.panDown();
+        event.consume();
+    }
+
+    @FXML
+    private void handlePanCenterButton(ActionEvent event) {
+        chartController.panCenter();
+        event.consume();
+    }
+
+    private void checkIfSimulationCanStart() {
+        if (!this.simulationController.getEnvironment().getShapes().isEmpty() &&
+                !this.simulationController.getEnvironment().getRobots().isEmpty() &&
+                !this.simulationController.getProgram().isEmpty()) {
+            handleSimulationButton(false);
+            handleConfigurationButton(true);
+        } else {
+            handleSimulationButton(true);
+            handleConfigurationButton(false);
+        }
+    }
+
+    private void handleConfigurationButton(boolean s) {
+        loadShapeButton.setDisable(s);
+        loadProgramButton.setDisable(s);
+        generateRobotsButton.setDisable(s);
+    }
+
+    private void handleSimulationButton(boolean s) {
+        startSimulation.setDisable(s);
+        startSimulationStepped.setDisable(s);
+        resetButton.setDisable(s);
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
@@ -175,27 +248,47 @@ public class SimulationController {
         alert.showAndWait();
     }
 
+    private int showEnteringNumberDialog(String title) {
+        TextInputDialog td = new TextInputDialog();
+        td.setHeaderText(title);
+        td.initOwner(window.getScene().getWindow());
+        Optional<String> text = td.showAndWait();
+        if (text.isPresent()) {
+            return text.map(Integer::parseInt).orElse(-1);
+        } else {
+            showAlert(Alert.AlertType.WARNING, "Warning", "No robots generated");
+            return -1;
+        }
+    }
+
+    private File showFileChooser(String title) {
+        fileChooser.setTitle(title);
+        Stage stage = (Stage) loadShapeButton.getScene().getWindow();
+        return fileChooser.showOpenDialog(stage);
+    }
+
     private boolean loadDataFromFile(File file) {
         try {
             EnvironmentParser shapeParser = new EnvironmentParser(ShapeChecker.DEFAULT_CHECKER);
             shapeParser.parseEnvironment(file);
-            shapeParser.getShapes().forEach(s -> environment.getShapes().add(s));
-            return true;
+            shapeParser.getShapes().forEach(s -> this.simulationController.getEnvironment().getShapes().add(s));
         } catch (IOException | EnvironmentException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Error while parsing the file: " + e);
             return false;
         }
+        return true;
     }
 
     private boolean loadProgramFormFile(File file) {
+        CommandParser commandParser = new CommandParser();
         try {
-            CommandParser commandParser = new CommandParser();
             commandParser.parseRobotProgram(file);
-            return true;
+            commandParser.getCommands().forEach(c -> this.simulationController.getProgram().add(c));
         } catch (CommandException | IOException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Error while parsing the file: " + e);
             return false;
         }
+        return true;
     }
 
     private void updateShapeInfo(File file) {
@@ -214,5 +307,9 @@ public class SimulationController {
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Error while loading the file: " + e);
         }
+    }
+
+    private void updateChart() {
+        chartController.updateChart();
     }
 }

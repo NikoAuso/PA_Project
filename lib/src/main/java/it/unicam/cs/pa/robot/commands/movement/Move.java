@@ -3,6 +3,7 @@ package it.unicam.cs.pa.robot.commands.movement;
 import it.unicam.cs.pa.environment.Position;
 import it.unicam.cs.pa.robot.Robot;
 import it.unicam.cs.pa.robot.commands.Command;
+import it.unicam.cs.pa.robot.commands.CommandException;
 
 public class Move implements Command {
     private final Position direction;
@@ -10,16 +11,16 @@ public class Move implements Command {
 
     public Move(double xDirection, double yDirection, double speed) {
         if (xDirection < -1 || xDirection > 1 || yDirection < -1 || yDirection > 1 || speed < 0) {
-            throw new IllegalArgumentException("Invalid move command parameters");
+            throw new CommandException("Invalid MOVE command parameters");
         }
 
         this.direction = new Position(xDirection, yDirection);
         this.speed = speed;
     }
 
-    public Move(Position direction,  double speed) {
+    public Move(Position direction, double speed) {
         if (direction.x() < -1 || direction.x() > 1 || direction.y() < -1 || direction.y() > 1 || speed < 0) {
-            throw new IllegalArgumentException("Invalid move command parameters");
+            throw new CommandException("Invalid MOVE command parameters");
         }
 
         this.direction = direction;
@@ -29,7 +30,7 @@ public class Move implements Command {
     /**
      * Executes the MOVE command on a specified robot within a given environment.
      *
-     * @param robot       The robot on which the command is executed.
+     * @param robot The robot on which the command is executed.
      */
     @Override
     public void execute(Robot robot) {

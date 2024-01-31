@@ -36,9 +36,9 @@ public class Environment  {
                 .collect(Collectors.toList());
     }
 
-    public void generateRandomRobots(int n){
+    public void generateRandomRobots(int n, int bound){
         for (int i = 0; i < n; i++){
-            this.robots.add(new BasicRobot(Position.random()));
+            this.robots.add(new BasicRobot(Position.random(bound)));
         }
     }
 }

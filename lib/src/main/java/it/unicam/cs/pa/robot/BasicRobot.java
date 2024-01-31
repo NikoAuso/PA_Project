@@ -10,12 +10,12 @@ import java.util.List;
  */
 public class BasicRobot implements Robot {
 
-    private Position position;      // Current position of the robot
-    private Position direction;     // Direction of the robot
-    private String currentLabel;    // Label associated with the current state of the robot
-    private List<String> labels;    // List of all labels associated with the robot
-    private double speed;           // Speed of the robot
-    private boolean canMove;        // Flag that identify if the robot can move
+    private Position position;          // Current position of the robot
+    private Position direction;         // Direction of the robot
+    private String currentLabel;        // Label associated with the current state of the robot
+    private final List<String> labels;  // List of all labels associated with the robot
+    private double speed;               // Speed of the robot
+    private boolean canMove;            // Flag that identify if the robot can move
 
     public BasicRobot(Position position) {
         this.position = position;
@@ -28,27 +28,27 @@ public class BasicRobot implements Robot {
 
     @Override
     public Position getPosition() {
-        return position;
+        return this.position;
     }
 
     @Override
     public Position getDirection() {
-        return direction;
+        return this.direction;
+    }
+
+    @Override
+    public String getCurrentLabel() {
+        return this.currentLabel;
+    }
+
+    @Override
+    public double getSpeed() {
+        return this.speed;
     }
 
     @Override
     public void setDirection(Position direction) {
         this.direction = direction;
-    }
-
-    @Override
-    public String getCurrentLabel() {
-        return currentLabel;
-    }
-
-    @Override
-    public double getSpeed() {
-        return speed;
     }
 
     @Override

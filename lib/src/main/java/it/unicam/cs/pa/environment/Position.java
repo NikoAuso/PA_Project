@@ -30,8 +30,8 @@ public record Position(double x, double y) {
      *
      * @return A randomly generated Position object.
      */
-    public static Position random() {
-        return new Position(randomCoordinate(), randomCoordinate());
+    public static Position random(int bound) {
+        return new Position(randomCoordinate(bound), randomCoordinate(bound));
     }
 
     public static Position random(Position min, Position max) {
@@ -51,10 +51,10 @@ public record Position(double x, double y) {
      *
      * @return A randomly generated coordinate value.
      */
-    private static double randomCoordinate() {
+    private static double randomCoordinate(int bound) {
         Random random = new Random();
 
-        double randomValue = (random.nextDouble() - 0.5) * Math.pow(10, MAX_DIGITS);
+        double randomValue = (random.nextDouble() * bound * 2) - bound;
         randomValue = BigDecimal.valueOf(randomValue).setScale(MAX_DIGITS, RoundingMode.HALF_UP).doubleValue();
 
         return randomValue;
