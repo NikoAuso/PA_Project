@@ -22,6 +22,8 @@ public class ChartController {
 
     private final Environment environment;
 
+    private final XYChart.Series<Number, Number> robotSeries;
+
     private double scaleFactorX;
 
     private double scaleFactorY;
@@ -39,6 +41,8 @@ public class ChartController {
         this.xAxis = xAxis;
         this.yAxis = yAxis;
         this.environment = simulationController.getEnvironment();
+
+        robotSeries = new XYChart.Series<>();
 
         initializeChart();
     }
@@ -84,15 +88,21 @@ public class ChartController {
     }
 
     public void drawRobots(List<Robot> robots) {
+        robotSeries.getData().clear();
+
         for (Robot robot : robots) {
-            XYChart.Series<Number, Number> series = new XYChart.Series<>();
-            series.getData().add(new XYChart.Data<>(robot.getPosition().x(), robot.getPosition().y()));
+            XYChart.Data<Number, Number> data = new XYChart.Data<>(robot.getPosition().x(), robot.getPosition().y());
+            robotSeries.getData().add(data);
 
-            javafx.scene.shape.Circle robotNode = new javafx.scene.shape.Circle(0.5 * scaleFactorX, ROBOT_COLOR);
-            series.getData().get(0).setNode(robotNode);
+            javafx.scene.shape.Circle robotNode = new javafx.scene.shape.Circle(0.5 * scaleFactorX);
+            robotNode.setFill(ROBOT_COLOR);
+            robotNode.setStroke(Color.BLACK);
+            robotNode.setStrokeWidth(0.5);
 
-            this.chart.getData().add(series);
+            data.setNode(robotNode);
         }
+
+        this.chart.getData().add(robotSeries);
     }
 
     private void addCircleShapeToChart(Circle shape) {
@@ -101,9 +111,8 @@ public class ChartController {
 
         javafx.scene.shape.Circle circleNode = new javafx.scene.shape.Circle(shape.radius() * scaleFactorX, CIRCLE_COLOR);
 
-        // Aggiungi un bordo alla forma Circle
-        circleNode.setStroke(Color.BLACK);  // Puoi impostare il colore del bordo a tuo piacimento
-        circleNode.setStrokeWidth(0.5);    // Puoi impostare la larghezza del bordo a tuo piacimento
+        circleNode.setStroke(Color.BLACK);
+        circleNode.setStrokeWidth(0.5);
 
         series.getData().get(0).setNode(circleNode);
 

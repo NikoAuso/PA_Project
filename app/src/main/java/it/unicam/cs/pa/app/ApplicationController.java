@@ -1,11 +1,9 @@
 package it.unicam.cs.pa.app;
 
 import it.unicam.cs.pa.SimulationController;
-import it.unicam.cs.pa.environment.Environment;
 import it.unicam.cs.pa.environment.EnvironmentException;
 import it.unicam.cs.pa.environment.EnvironmentParser;
 import it.unicam.cs.pa.environment.shapes.ShapeChecker;
-import it.unicam.cs.pa.robot.Robot;
 import it.unicam.cs.pa.robot.commands.CommandException;
 import it.unicam.cs.pa.robot.commands.CommandParser;
 import javafx.event.ActionEvent;
@@ -27,7 +25,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
-public class SimulatorController {
+public class ApplicationController {
     private SimulationController simulationController;
 
     private ChartController chartController;
@@ -112,7 +110,7 @@ public class SimulatorController {
         File selectedFile = showFileChooser("Load environment file");
         if (selectedFile != null && selectedFile.exists()) {
             if (selectedFile.length() > 0) {
-                if (loadDataFromFile(selectedFile)) {
+                if (loadShapeFromFile(selectedFile)) {
                     updateShapeInfo(selectedFile);
                     updateChart();
                 }
@@ -156,14 +154,16 @@ public class SimulatorController {
 
     @FXML
     private void handleStartSimulation(ActionEvent event) {
-        // Replace this with the actual action for starting the simulation
+        // TODO: implementare
         System.out.println("Start Simulation Button Clicked");
+        event.consume();
     }
 
     @FXML
     private void handleStartSimulationStepped(ActionEvent event) {
-        // Replace this with the actual action for starting the simulation step by step
+        // TODO: implementare
         System.out.println("Start Simulation Stepped Button Clicked");
+        event.consume();
     }
 
     @FXML
@@ -171,7 +171,10 @@ public class SimulatorController {
         this.simulationController.getEnvironment().getRobots().clear();
         this.simulationController.getEnvironment().getShapes().clear();
         updateChart();
+        this.programLoadedDetails.clear();
+        this.shapesLoadedDetails.clear();
         checkIfSimulationCanStart();
+        event.consume();
     }
 
     @FXML
@@ -220,21 +223,21 @@ public class SimulatorController {
         if (!this.simulationController.getEnvironment().getShapes().isEmpty() &&
                 !this.simulationController.getEnvironment().getRobots().isEmpty() &&
                 !this.simulationController.getProgram().isEmpty()) {
-            handleSimulationButton(false);
-            handleConfigurationButton(true);
+            handleEnablingSimulationButton(false);
+            handleEnablingConfigurationButton(true);
         } else {
-            handleSimulationButton(true);
-            handleConfigurationButton(false);
+            handleEnablingSimulationButton(true);
+            handleEnablingConfigurationButton(false);
         }
     }
 
-    private void handleConfigurationButton(boolean s) {
+    private void handleEnablingConfigurationButton(boolean s) {
         loadShapeButton.setDisable(s);
         loadProgramButton.setDisable(s);
         generateRobotsButton.setDisable(s);
     }
 
-    private void handleSimulationButton(boolean s) {
+    private void handleEnablingSimulationButton(boolean s) {
         startSimulation.setDisable(s);
         startSimulationStepped.setDisable(s);
         resetButton.setDisable(s);
@@ -267,9 +270,9 @@ public class SimulatorController {
         return fileChooser.showOpenDialog(stage);
     }
 
-    private boolean loadDataFromFile(File file) {
+    private boolean loadShapeFromFile(File file) {
+        EnvironmentParser shapeParser = new EnvironmentParser(ShapeChecker.DEFAULT_CHECKER);
         try {
-            EnvironmentParser shapeParser = new EnvironmentParser(ShapeChecker.DEFAULT_CHECKER);
             shapeParser.parseEnvironment(file);
             shapeParser.getShapes().forEach(s -> this.simulationController.getEnvironment().getShapes().add(s));
         } catch (IOException | EnvironmentException e) {

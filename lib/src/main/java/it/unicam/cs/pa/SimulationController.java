@@ -3,14 +3,16 @@ package it.unicam.cs.pa;
 import it.unicam.cs.pa.environment.Environment;
 import it.unicam.cs.pa.robot.commands.Command;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SimulationController implements Simulator{
+public class SimulationController implements Simulator {
     private Environment environment;
     private List<Command> program;
 
     public SimulationController() {
         this.environment = new Environment();
+        this.program = new ArrayList<>();
     }
 
     public Environment getEnvironment() {
@@ -19,10 +21,6 @@ public class SimulationController implements Simulator{
 
     public List<Command> getProgram() {
         return program;
-    }
-
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
     }
 
     @Override

@@ -3,7 +3,7 @@ package it.unicam.cs.pa.environment;
 /**
  * Custom exception class for handling position-related exceptions.
  */
-public class PositionException extends RuntimeException {
+public class PositionException extends EnvironmentException {
     /**
      * Constructs a new instance of the PositionException with the specified detail message.
      *

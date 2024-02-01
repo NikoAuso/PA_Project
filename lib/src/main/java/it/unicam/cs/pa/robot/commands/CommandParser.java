@@ -1,6 +1,10 @@
 package it.unicam.cs.pa.robot.commands;
 
 import it.unicam.cs.pa.environment.Position;
+import it.unicam.cs.pa.robot.commands.loop.DoForever;
+import it.unicam.cs.pa.robot.commands.loop.Done;
+import it.unicam.cs.pa.robot.commands.loop.Repeat;
+import it.unicam.cs.pa.robot.commands.loop.Until;
 import it.unicam.cs.pa.robot.commands.movement.*;
 
 import java.io.File;
@@ -57,6 +61,8 @@ public final class CommandParser {
         }
     }
 
+    // Loop commands
+    /*###################################################*/
     private void addForeverMethod(String[] elements) {
         if (elements.length == 2) {
             commands.add(new DoForever());//TODO: implementare
@@ -85,21 +91,21 @@ public final class CommandParser {
         }
     }
 
-    private void addContinueMethod(String[] elements) {
-        if (elements.length == 2) {
-            try {
-                commands.add(new Continue());//TODO: implementare
-            } catch (NumberFormatException e) {
-                throwSyntaxErrorException();
-            }
+    private void addDoneMethod(String[] elements) {
+        if (elements.length == 1) {
+            commands.add(new Done());
         } else {
             throwSyntaxErrorException();
         }
     }
+    /*###################################################*/
 
-    private void addDoneMethod(String[] elements) {
-        if (elements.length == 1) {
-            commands.add(new Done());
+
+    // Movement commands
+    /*###################################################*/
+    private void addContinueMethod(String[] elements) {
+        if (elements.length == 2) {
+            commands.add(new Continue(Double.parseDouble(elements[1])));
         } else {
             throwSyntaxErrorException();
         }
@@ -115,13 +121,14 @@ public final class CommandParser {
 
     private void addFollowMethod(String[] elements) {
         if (elements.length == 4) {
-            commands.add(new Follow());//TODO: implementare
+            double[] args = toDoubleArray(2, elements);
+            assert args != null;
+            commands.add(new Follow(elements[1], args[0], args[1]));
         } else {
             throwSyntaxErrorException();
         }
 
     }
-
 
     private void addUnSignalMethod(String[] elements) {
         if (elements.length == 2) {
@@ -144,12 +151,9 @@ public final class CommandParser {
             if (elements.length == 7) {
                 double[] args = toDoubleArray(2, elements);
                 assert args != null;
-                Position position1 = new Position(args[0], args[1]);
-                Position position2 = new Position(args[2], args[3]);
-                double speed = args[4];
-                commands.add(new MoveRandom(position1, position2, speed));
+                commands.add(new Move(new Position(args[0], args[1]), new Position(args[2], args[3]), args[4]));
             } else
-                throw new CommandException("Invalid input argument for instruction MOVE RANDOM!");
+                throwSyntaxErrorException();
         } else {
             if (elements.length == 4) {
                 double[] args = toDoubleArray(1, elements);
@@ -158,9 +162,10 @@ public final class CommandParser {
                 double speed = args[2];
                 commands.add(new Move(position, speed));
             } else
-                throw new CommandException("Invalid input argument for instruction MOVE!");
+                throwSyntaxErrorException();
         }
     }
+    /*###################################################*/
 
     private double[] toDoubleArray(int from, String[] elements) throws CommandException {
         try {

@@ -1,39 +1,24 @@
 package it.unicam.cs.pa.robot.commands.movement;
 
+import it.unicam.cs.pa.environment.Environment;
 import it.unicam.cs.pa.environment.Position;
 import it.unicam.cs.pa.robot.Robot;
 import it.unicam.cs.pa.robot.commands.Command;
 import it.unicam.cs.pa.robot.commands.CommandException;
 
-public class Move implements Command {
-    private final Position direction;
-    private final double speed;
-
-    public Move(double xDirection, double yDirection, double speed) {
-        if (xDirection < -1 || xDirection > 1 || yDirection < -1 || yDirection > 1 || speed < 0) {
-            throw new CommandException("Invalid MOVE command parameters");
+public record Move(Position direction, double speed) implements Command {
+    public Move {
+        if (speed < 0) {
+            throw new CommandException("Invalid speed value");
         }
-
-        this.direction = new Position(xDirection, yDirection);
-        this.speed = speed;
     }
 
-    public Move(Position direction, double speed) {
-        if (direction.x() < -1 || direction.x() > 1 || direction.y() < -1 || direction.y() > 1 || speed < 0) {
-            throw new CommandException("Invalid MOVE command parameters");
-        }
-
-        this.direction = direction;
-        this.speed = speed;
+    public Move(Position position1, Position position2, double speed){
+        this(Position.random(position1, position2), speed);
     }
 
-    /**
-     * Executes the MOVE command on a specified robot within a given environment.
-     *
-     * @param robot The robot on which the command is executed.
-     */
     @Override
-    public void execute(Robot robot) {
+    public void execute(Environment environment, Robot robot) {
         robot.setSpeed(this.speed);
         robot.setDirection(this.direction);
         robot.move();

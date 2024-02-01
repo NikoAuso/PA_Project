@@ -38,7 +38,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="window" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.pa.app.SimulatorController">
+<VBox fx:id="window" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.pa.app.ApplicationController">
     <SplitPane dividerPositions="0.2505567928730512, 0.5" focusTraversable="true" VBox.vgrow="ALWAYS">
         <AnchorPane maxWidth="200.0">
             <SplitPane dividerPositions="0.28859060402684567, 0.6577181208053692" orientation="VERTICAL" prefHeight="598.0" prefWidth="222.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -120,7 +120,7 @@
                         <Font size="12.0" />
                     </font>
                 </Label>
-                <TextArea fx:id="programLoadedDetails" editable="false" prefHeight="225.0" prefWidth="180.0">
+                <TextArea fx:id="shapesLoadedDetails" editable="false" prefHeight="225.0" prefWidth="180.0">
                     <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </VBox.margin>
@@ -132,7 +132,7 @@
                         <Font size="12.0" />
                     </font>
                 </Label>
-                <TextArea fx:id="shapesLoadedDetails" editable="false" prefHeight="225.0" prefWidth="180.0">
+                <TextArea fx:id="programLoadedDetails" editable="false" prefHeight="225.0" prefWidth="180.0">
                     <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </VBox.margin>
