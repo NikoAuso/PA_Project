@@ -5,3 +5,7 @@
 plugins {
     id("it.unicam.cs.pa.java-library-conventions")
 }
+
+dependencies{
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+}

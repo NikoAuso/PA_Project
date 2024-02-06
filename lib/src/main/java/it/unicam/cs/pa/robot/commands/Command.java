@@ -8,4 +8,6 @@ import it.unicam.cs.pa.robot.Robot;
  */
 public interface Command {
     void execute(Environment environment, Robot robot) throws CommandException;
+
+    Class<? extends Command> getType();
 }

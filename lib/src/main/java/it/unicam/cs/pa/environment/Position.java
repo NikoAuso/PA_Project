@@ -2,7 +2,9 @@ package it.unicam.cs.pa.environment;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Random;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A record representing a 2D position with x and y coordinates.
@@ -39,10 +41,13 @@ public record Position(double x, double y) {
             throw new PositionException("The positions provided must be distant from each other.");
         }
 
-        Random random = new Random();
+        double EPSILON = 1e-10;
+        double deltaX = min.x() == max.x() ? EPSILON : 0;
+        double deltaY = min.y() == max.y() ? EPSILON : 0;
+
         return new Position(
-                random.nextDouble(Math.min(min.x(), max.x()), Math.max(min.x(), max.x())),
-                random.nextDouble(Math.min(min.y(), max.y()), Math.max(min.y(), max.y()))
+                ThreadLocalRandom.current().nextDouble(Math.min(min.x(), max.x()) - deltaX, Math.max(min.x(), max.x()) + deltaY),
+                ThreadLocalRandom.current().nextDouble(Math.min(min.y(), max.y()) - deltaX, Math.max(min.y(), max.y()) + deltaY)
         );
     }
 
@@ -52,12 +57,16 @@ public record Position(double x, double y) {
      * @return A randomly generated coordinate value.
      */
     private static double randomCoordinate(int bound) {
-        Random random = new Random();
-
-        double randomValue = (random.nextDouble() * bound * 2) - bound;
+        double randomValue = (ThreadLocalRandom.current().nextDouble() * bound * 2) - bound;
         randomValue = BigDecimal.valueOf(randomValue).setScale(MAX_DIGITS, RoundingMode.HALF_UP).doubleValue();
 
         return randomValue;
+    }
+
+    public static Optional<Position> average(List<Position> positions) {
+        Optional<Position> a = positions.parallelStream()
+                .reduce((accP, p) -> new Position(accP.x() + p.x(), accP.y() + p.y()));
+        return a.map(position -> new Position(position.x() / positions.size(), position.y() / positions.size()));
     }
 
     /**
