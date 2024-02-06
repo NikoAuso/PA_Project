@@ -13,7 +13,7 @@ public record Rectangle(Position center, double width, double height, String lab
      * the height or width is not a positive value.
      *
      * @param center The center position of the rectangle.
-     * @param width The width of the rectangle.
+     * @param width  The width of the rectangle.
      * @param height The height of the rectangle.
      * @throws ShapeException if height or width is not a positive value.
      */
@@ -28,8 +28,13 @@ public record Rectangle(Position center, double width, double height, String lab
     }
 
     @Override
-    public ShapeType getType(){
+    public ShapeType getType() {
         return ShapeType.RECTANGLE;
+    }
+
+    @Override
+    public String getLabel() {
+        return this.label;
     }
 
     @Override

@@ -30,9 +30,9 @@ public class Environment  {
         return this.shapes;
     }
 
-    public List<Robot> getSignalingRobots() {
+    public List<Robot> getSignalingRobots(String label) {
         return this.robots.stream()
-                .filter(t -> !t.getCurrentLabel().isEmpty())
+                .filter(r -> r.isSignaling(label))
                 .collect(Collectors.toList());
     }
 

@@ -6,10 +6,13 @@ import it.unicam.cs.pa.environment.shapes.Circle;
 import it.unicam.cs.pa.environment.shapes.Rectangle;
 import it.unicam.cs.pa.environment.shapes.Shape;
 import it.unicam.cs.pa.robot.Robot;
-import javafx.scene.Node;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.util.List;
 
@@ -109,12 +112,14 @@ public class ChartController {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.getData().add(new XYChart.Data<>(shape.center().x(), shape.center().y()));
 
-        javafx.scene.shape.Circle circleNode = new javafx.scene.shape.Circle(shape.radius() * scaleFactorX, CIRCLE_COLOR);
+        javafx.scene.shape.Circle circle = new javafx.scene.shape.Circle(shape.radius() * scaleFactorX, CIRCLE_COLOR);
+        circle.setStroke(Color.BLACK);
+        circle.setStrokeWidth(0.5);
 
-        circleNode.setStroke(Color.BLACK);
-        circleNode.setStrokeWidth(0.5);
+        StackPane container = new StackPane(circle, createLabel(shape.label()));
+        container.setBackground(Background.fill(Color.TRANSPARENT));
 
-        series.getData().get(0).setNode(circleNode);
+        series.getData().get(0).setNode(container);
 
         this.chart.getData().add(series);
     }
@@ -123,17 +128,26 @@ public class ChartController {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.getData().add(new XYChart.Data<>(shape.center().x(), shape.center().y()));
 
-        javafx.scene.shape.Rectangle rectangleNode = new javafx.scene.shape.Rectangle(
+        javafx.scene.shape.Rectangle rectangle = new javafx.scene.shape.Rectangle(
                 shape.width() * scaleFactorX,
                 shape.height() * scaleFactorY,
                 RECTANGLE_COLOR);
+        rectangle.setStroke(Color.BLACK);
+        rectangle.setStrokeWidth(0.5);
 
-        rectangleNode.setStroke(Color.BLACK);
-        rectangleNode.setStrokeWidth(0.5);
+        StackPane container = new StackPane(rectangle, createLabel(shape.label()));
+        container.setBackground(Background.fill(Color.TRANSPARENT));
 
-        series.getData().get(0).setNode(rectangleNode);
+        series.getData().get(0).setNode(container);
 
         this.chart.getData().add(series);
+    }
+
+    private Label createLabel(String label){
+        Label labelToCreate = new Label(label);
+        labelToCreate.setFont(new Font(0.5 * scaleFactorX));
+        labelToCreate.setTextFill(Color.BLACK);
+        return labelToCreate;
     }
 
     public void zoomIn() {

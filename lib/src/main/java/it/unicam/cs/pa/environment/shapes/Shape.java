@@ -15,6 +15,13 @@ public interface Shape{
     ShapeType getType();
 
     /**
+     * Get the label of the shape.
+     *
+     * @return label of the shape
+     */
+    String getLabel();
+
+    /**
      * Checks if the given position is contained within the shape.
      *
      * @param toCheckPosition The position to check for containment.

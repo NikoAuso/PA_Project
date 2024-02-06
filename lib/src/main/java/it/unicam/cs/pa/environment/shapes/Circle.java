@@ -31,6 +31,11 @@ public record Circle(Position center, double radius, String label) implements Sh
     }
 
     @Override
+    public String getLabel(){
+        return this.label;
+    }
+
+    @Override
     public boolean contains(Position toCheckPosition) {
         double distance = this.center().distanceTo(toCheckPosition);
         return distance <= this.radius();

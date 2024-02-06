@@ -3,7 +3,7 @@ package it.unicam.cs.pa.robot.commands;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public enum RobotCommand {
+public enum RobotCommands {
     MOVE("MOVE"),
     SIGNAL("SIGNAL"),
     UNSIGNAL("UNSIGNAL"),
@@ -17,7 +17,7 @@ public enum RobotCommand {
 
     private final String code;
 
-    RobotCommand(String code) {
+    RobotCommands(String code) {
         this.code = code;
     }
 
@@ -25,7 +25,7 @@ public enum RobotCommand {
         return line.startsWith(this.code);
     }
 
-    static Optional<RobotCommand> selectCommand(String line) {
-        return Stream.of(RobotCommand.values()).filter(c -> c.isCommandOfLine(line)).findFirst();
+    static Optional<RobotCommands> selectCommand(String line) {
+        return Stream.of(RobotCommands.values()).filter(c -> c.isCommandOfLine(line)).findFirst();
     }
 }

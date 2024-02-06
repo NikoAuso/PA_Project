@@ -1,11 +1,14 @@
 package it.unicam.cs.pa.app;
 
 import it.unicam.cs.pa.SimulationController;
+import it.unicam.cs.pa.SimulationListener;
+import it.unicam.cs.pa.Simulator;
 import it.unicam.cs.pa.environment.EnvironmentException;
 import it.unicam.cs.pa.environment.EnvironmentParser;
 import it.unicam.cs.pa.environment.shapes.ShapeChecker;
 import it.unicam.cs.pa.robot.commands.CommandException;
 import it.unicam.cs.pa.robot.commands.CommandParser;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;
@@ -14,7 +17,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -25,16 +27,15 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
-public class ApplicationController {
+public class ApplicationController implements SimulationListener, Simulator {
     private SimulationController simulationController;
 
     private ChartController chartController;
 
-    @FXML
-    private Font mainLabel;
+    private final int MAX_THREADS = Runtime.getRuntime().availableProcessors() * 2;
 
     @FXML
-    private VBox window;
+    private Font mainLabel;
 
     @FXML
     private Button loadShapeButton;
@@ -96,6 +97,7 @@ public class ApplicationController {
     @FXML
     private void initialize() {
         simulationController = new SimulationController();
+        simulationController.addSimulationListener(this);
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("*.txt", "*.txt"),
@@ -142,37 +144,45 @@ public class ApplicationController {
 
     @FXML
     private void handleGenerateRobotsButton(ActionEvent event) {
-        int n = showEnteringNumberDialog("Enter the number of robots to spawn.");
-        if (n > 0) {
-            this.simulationController.getEnvironment().getRobots().clear();
-            this.simulationController.getEnvironment().generateRandomRobots(n, ChartController.INITIAL_GRAPH_BOUND);
-            updateChart();
+        try {
+            int n = showEnteringNumberDialog(String.format("Enter the number of robots to spawn (MAX = %s).", MAX_THREADS));
+            if (n <= 0)
+                showAlert(Alert.AlertType.WARNING, "Warning", "No robots generated.");
+            else if (n <= MAX_THREADS) {
+                this.simulationController.getEnvironment().getRobots().clear();
+                this.simulationController.getEnvironment().generateRandomRobots(n, ChartController.INITIAL_GRAPH_BOUND);
+                updateChart();
+            } else
+                showAlert(Alert.AlertType.ERROR, "Error", "Trying to generate too much robots.");
+            checkIfSimulationCanStart();
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Warning", "No number of robots to generate provided.");
         }
-        checkIfSimulationCanStart();
         event.consume();
     }
 
     @FXML
     private void handleStartSimulation(ActionEvent event) {
-        // TODO: implementare
-        System.out.println("Start Simulation Button Clicked");
+        int time = showEnteringNumberDialog("Enter the duration of the simulation.");
+        int dt = showEnteringNumberDialog("Enter the duration of each instruction.");
+        this.simulate(dt, time);
         event.consume();
     }
 
     @FXML
     private void handleStartSimulationStepped(ActionEvent event) {
-        // TODO: implementare
-        System.out.println("Start Simulation Stepped Button Clicked");
+        this.simulationController.step();
         event.consume();
     }
 
     @FXML
     private void handleResetButton(ActionEvent event) {
+        this.simulationController.interrupt();
         this.simulationController.getEnvironment().getRobots().clear();
         this.simulationController.getEnvironment().getShapes().clear();
-        updateChart();
         this.programLoadedDetails.clear();
         this.shapesLoadedDetails.clear();
+        updateChart();
         checkIfSimulationCanStart();
         event.consume();
     }
@@ -225,6 +235,7 @@ public class ApplicationController {
                 !this.simulationController.getProgram().isEmpty()) {
             handleEnablingSimulationButton(false);
             handleEnablingConfigurationButton(true);
+            this.simulationController.setUpSimulation();
         } else {
             handleEnablingSimulationButton(true);
             handleEnablingConfigurationButton(false);
@@ -253,15 +264,10 @@ public class ApplicationController {
 
     private int showEnteringNumberDialog(String title) {
         TextInputDialog td = new TextInputDialog();
+        td.setTitle("Input Dialog");
         td.setHeaderText(title);
-        td.initOwner(window.getScene().getWindow());
         Optional<String> text = td.showAndWait();
-        if (text.isPresent()) {
-            return text.map(Integer::parseInt).orElse(-1);
-        } else {
-            showAlert(Alert.AlertType.WARNING, "Warning", "No robots generated");
-            return -1;
-        }
+        return text.map(Integer::parseInt).orElse(-1);
     }
 
     private File showFileChooser(String title) {
@@ -313,6 +319,19 @@ public class ApplicationController {
     }
 
     private void updateChart() {
-        chartController.updateChart();
+        Platform.runLater(() -> chartController.updateChart());
+    }
+
+    @Override
+    public void simulationStateChanged() {
+        updateChart();
+    }
+
+    public void simulate(double dt, double time) {
+        double currentTime = 0;
+        while (currentTime < time) {
+            this.simulationController.step();
+            currentTime += dt;
+        }
     }
 }
