@@ -11,8 +11,8 @@ public record Follow(String label, double dist, double speed) implements Movemen
     @Override
     public void execute(Environment environment, Robot robot) throws CommandException {
         robot.setDirection(Position.average(environment.getSignalingRobots(label).stream()
-                        .map(Robot::getPosition)
-                        .filter(position -> position.distanceTo(robot.getPosition()) <= dist)
+                        .map(Robot::position)
+                        .filter(position -> position.distanceTo(robot.position()) <= dist)
                         .collect(Collectors.toList())
                 ).orElse(Position.random(new Position(-dist, -dist), new Position(dist, dist))));
         robot.setSpeed(speed);

@@ -35,29 +35,24 @@ public class BasicRobot implements Robot {
         this.loopCounts = new ArrayDeque<>();
     }
 
+
+    /*______________________________________________
+     * Methods for "Robot" interface
+     * ______________________________________________
+     */
     @Override
-    public Position getPosition() {
+    public Position position() {
         return this.position;
     }
 
     @Override
-    public Position getDirection() {
+    public Position direction() {
         return this.direction;
     }
 
     @Override
-    public int getCurrentCommandIndex() {
-        return this.currentCommandIndex;
-    }
-
-    @Override
-    public boolean canMove() {
-        return this.canMove;
-    }
-
-    @Override
-    public void setFinishLoopIndex() {
-        this.finishLoopIndex = currentCommandIndex + 1;
+    public String currentLabel() {
+        return currentLabel;
     }
 
     @Override
@@ -72,35 +67,8 @@ public class BasicRobot implements Robot {
     }
 
     @Override
-    public void increaseCurrentCommandIndex() {
-        this.currentCommandIndex++;
-    }
-
-    @Override
-    public void pushStartingLoopIndex(int index) {
-        this.startingLoopIndices.push(index);
-    }
-
-    @Override
-    public void pushLoopCount(int count, int index) {
-        if (this.startingLoopIndices.isEmpty() || this.startingLoopIndices.peekFirst() != index)
-            this.loopCounts.push(count);
-    }
-
-    @Override
-    public void decreaseLoopCount() {
-        int tmpCount = this.loopCounts.pop();
-        if (tmpCount == 0)
-            this.currentCommandIndex = finishLoopIndex;
-        else {
-            this.loopCounts.push(tmpCount - 1);
-            this.increaseCurrentCommandIndex();
-        }
-    }
-
-    @Override
-    public void resetLoopIndex() {
-        this.currentCommandIndex = startingLoopIndices.pop();
+    public boolean canMove() {
+        return this.canMove;
     }
 
     @Override
@@ -108,11 +76,16 @@ public class BasicRobot implements Robot {
         if (!this.canMove)
             throw new RobotException("This robot can't move anymore");
 
-        double newX = this.getPosition().x() + this.getDirection().x() * speed;
-        double newY = this.getPosition().y() + this.getDirection().y() * speed;
+        double newX = this.position().x() + this.direction().x() * speed;
+        double newY = this.position().y() + this.direction().y() * speed;
 
         if (Double.isFinite(newX) && Double.isFinite(newY))
             this.position = new Position(newX, newY);
+    }
+
+    @Override
+    public void stop() {
+        this.canMove = false;
     }
 
     @Override
@@ -122,7 +95,7 @@ public class BasicRobot implements Robot {
     }
 
     @Override
-    public void unisignal(String label) {
+    public void unsignal(String label) {
         if (this.currentLabel.equals(label))
             this.currentLabel = "";
         this.signalingLabels.remove(label);
@@ -133,8 +106,53 @@ public class BasicRobot implements Robot {
         return this.signalingLabels.contains(label);
     }
 
+
+    /*______________________________________________
+     * Methods for "RobotCommandManagement" interface
+     * ______________________________________________
+     */
     @Override
-    public void stop() {
-        this.canMove = false;
+    public int getCurrentCommandIndex() {
+        return this.currentCommandIndex;
+    }
+
+    @Override
+    public void increaseCurrentCommandIndex() {
+        this.currentCommandIndex++;
+    }
+
+    @Override
+    public void setFinishLoopIndex() {
+        this.finishLoopIndex = currentCommandIndex + 1;
+    }
+
+    @Override
+    public void pushStartingLoopIndex(int index) {
+        if (!this.startingLoopIndices.contains(index))
+            this.startingLoopIndices.push(index);
+    }
+
+    @Override
+    public void pushLoopCount(int count, int index) {
+        if (!this.startingLoopIndices.isEmpty() || this.startingLoopIndices.getFirst() != index)
+            this.loopCounts.push(count);
+    }
+
+    @Override
+    public void decreaseLoopCount() {
+        Integer tmpCount = this.loopCounts.pollLast();
+        if (tmpCount != null) {
+            if (tmpCount == 0) {
+                this.currentCommandIndex = finishLoopIndex;
+            } else {
+                this.loopCounts.offerLast(tmpCount - 1);
+                this.increaseCurrentCommandIndex();
+            }
+        }
+    }
+
+    @Override
+    public void resetLoopIndex() {
+        this.currentCommandIndex = startingLoopIndices.pop();
     }
 }

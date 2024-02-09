@@ -7,6 +7,6 @@ import it.unicam.cs.pa.robot.commands.CommandException;
 public record Unsignal(String label) implements MovementCommand {
     @Override
     public void execute(Environment environment, Robot robot) throws CommandException {
-        robot.unisignal(label);
+        robot.unsignal(label);
     }
 }

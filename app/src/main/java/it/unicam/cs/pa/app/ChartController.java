@@ -85,6 +85,7 @@ public class ChartController {
                 case CIRCLE -> addCircleShapeToChart((Circle) shape);
                 case RECTANGLE -> addRectangleShapeToChart((Rectangle) shape);
                 default -> {
+                    //do nothing
                 }
             }
         }
@@ -94,7 +95,7 @@ public class ChartController {
         robotSeries.getData().clear();
 
         for (Robot robot : robots) {
-            XYChart.Data<Number, Number> data = new XYChart.Data<>(robot.getPosition().x(), robot.getPosition().y());
+            XYChart.Data<Number, Number> data = new XYChart.Data<>(robot.position().x(), robot.position().y());
             robotSeries.getData().add(data);
 
             javafx.scene.shape.Circle robotNode = new javafx.scene.shape.Circle(0.5 * scaleFactorX);
@@ -102,7 +103,13 @@ public class ChartController {
             robotNode.setStroke(Color.BLACK);
             robotNode.setStrokeWidth(0.5);
 
-            data.setNode(robotNode);
+            Label label = createLabel(robot.currentLabel());
+            label.setTranslateY(-20);
+
+            StackPane container = new StackPane(robotNode, label);
+            container.setBackground(Background.fill(Color.TRANSPARENT));
+
+            data.setNode(container);
         }
 
         this.chart.getData().add(robotSeries);

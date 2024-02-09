@@ -10,7 +10,7 @@ public record Until(String label, int startingIndex) implements LoopCommand {
         robot.pushStartingLoopIndex(startingIndex);
         if (environment.getShapes().stream()
                 .filter(s -> s.getLabel().equals(this.label.toUpperCase()))
-                .anyMatch(s -> s.contains(robot.getPosition()))) {
+                .anyMatch(s -> s.contains(robot.position()))) {
             robot.pushLoopCount(1, startingIndex);
             robot.decreaseLoopCount();
         }else

@@ -40,6 +40,7 @@ public final class CommandParser {
 
     private void parseRobotProgram(List<String> lines) throws CommandException {
         for (String line : lines) {
+            linecounter++;
             Optional<RobotCommands> oCommand = RobotCommands.selectCommand(line);
             if (oCommand.isPresent()) {
                 String[] elements = line.trim().toUpperCase().split(" ");
@@ -57,7 +58,6 @@ public final class CommandParser {
                 }
             } else
                 throw new CommandException(String.format("Unknown command at line %d", this.linecounter));
-            linecounter++;
         }
     }
 
@@ -65,7 +65,7 @@ public final class CommandParser {
     /*###################################################*/
     private void addForeverMethod(String[] elements) {
         if (elements.length == 2) {
-            commands.add(new DoForever(linecounter));
+            commands.add(new DoForever(linecounter - 1));
         } else {
             throwSyntaxErrorException();
         }
@@ -73,7 +73,7 @@ public final class CommandParser {
 
     private void addUntilMethod(String[] elements) {
         if (elements.length == 2) {
-            commands.add(new Until(elements[1], linecounter));
+            commands.add(new Until(elements[1], linecounter - 1));
         } else {
             throwSyntaxErrorException();
         }
@@ -82,7 +82,7 @@ public final class CommandParser {
     private void addRepeatMethod(String[] elements) {
         if (elements.length == 2) {
             try {
-                commands.add(new Repeat(Integer.parseInt(elements[1]), linecounter));
+                commands.add(new Repeat(Integer.parseInt(elements[1]), linecounter - 1));
             } catch (NumberFormatException e) {
                 throwSyntaxErrorException();
             }

@@ -8,6 +8,8 @@ import it.unicam.cs.pa.environment.EnvironmentParser;
 import it.unicam.cs.pa.environment.shapes.ShapeChecker;
 import it.unicam.cs.pa.robot.commands.CommandException;
 import it.unicam.cs.pa.robot.commands.CommandParser;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +22,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +34,6 @@ public class ApplicationController implements SimulationListener, Simulator {
     private SimulationController simulationController;
 
     private ChartController chartController;
-
-    private final int MAX_THREADS = Runtime.getRuntime().availableProcessors() * 2;
 
     @FXML
     private Font mainLabel;
@@ -145,15 +146,14 @@ public class ApplicationController implements SimulationListener, Simulator {
     @FXML
     private void handleGenerateRobotsButton(ActionEvent event) {
         try {
-            int n = showEnteringNumberDialog(String.format("Enter the number of robots to spawn (MAX = %s).", MAX_THREADS));
+            int n = showEnteringNumberDialogInt("Enter the number of robots to spawn.");
             if (n <= 0)
                 showAlert(Alert.AlertType.WARNING, "Warning", "No robots generated.");
-            else if (n <= MAX_THREADS) {
+            else {
                 this.simulationController.getEnvironment().getRobots().clear();
                 this.simulationController.getEnvironment().generateRandomRobots(n, ChartController.INITIAL_GRAPH_BOUND);
                 updateChart();
-            } else
-                showAlert(Alert.AlertType.ERROR, "Error", "Trying to generate too much robots.");
+            }
             checkIfSimulationCanStart();
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.WARNING, "Warning", "No number of robots to generate provided.");
@@ -163,9 +163,18 @@ public class ApplicationController implements SimulationListener, Simulator {
 
     @FXML
     private void handleStartSimulation(ActionEvent event) {
-        int time = showEnteringNumberDialog("Enter the duration of the simulation.");
-        int dt = showEnteringNumberDialog("Enter the duration of each instruction.");
-        this.simulate(dt, time);
+        double time;
+        double dt;
+        try {
+            time = showEnteringNumberDialogDouble("Enter the duration of the simulation.");
+            dt = showEnteringNumberDialogDouble("Enter the duration of each instruction.");
+            if (dt > 0 && dt <= time)
+                this.simulate(dt, time);
+            else
+                showAlert(Alert.AlertType.WARNING, "Simulation input", "Invalid simulation time or duration.");
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Simulation input", "No number provided.");
+        }
         event.consume();
     }
 
@@ -177,7 +186,6 @@ public class ApplicationController implements SimulationListener, Simulator {
 
     @FXML
     private void handleResetButton(ActionEvent event) {
-        this.simulationController.interrupt();
         this.simulationController.getEnvironment().getRobots().clear();
         this.simulationController.getEnvironment().getShapes().clear();
         this.programLoadedDetails.clear();
@@ -235,7 +243,6 @@ public class ApplicationController implements SimulationListener, Simulator {
                 !this.simulationController.getProgram().isEmpty()) {
             handleEnablingSimulationButton(false);
             handleEnablingConfigurationButton(true);
-            this.simulationController.setUpSimulation();
         } else {
             handleEnablingSimulationButton(true);
             handleEnablingConfigurationButton(false);
@@ -262,12 +269,20 @@ public class ApplicationController implements SimulationListener, Simulator {
         alert.showAndWait();
     }
 
-    private int showEnteringNumberDialog(String title) {
+    private int showEnteringNumberDialogInt(String title) {
         TextInputDialog td = new TextInputDialog();
-        td.setTitle("Input Dialog");
+        td.setTitle(title);
         td.setHeaderText(title);
         Optional<String> text = td.showAndWait();
         return text.map(Integer::parseInt).orElse(-1);
+    }
+
+    private double showEnteringNumberDialogDouble(String title) {
+        TextInputDialog td = new TextInputDialog();
+        td.setTitle(title);
+        td.setHeaderText(title);
+        Optional<String> text = td.showAndWait();
+        return text.map(Double::parseDouble).orElse(-1.0);
     }
 
     private File showFileChooser(String title) {
@@ -280,6 +295,7 @@ public class ApplicationController implements SimulationListener, Simulator {
         EnvironmentParser shapeParser = new EnvironmentParser(ShapeChecker.DEFAULT_CHECKER);
         try {
             shapeParser.parseEnvironment(file);
+            this.simulationController.getEnvironment().getShapes().clear();
             shapeParser.getShapes().forEach(s -> this.simulationController.getEnvironment().getShapes().add(s));
         } catch (IOException | EnvironmentException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Error while parsing the file: " + e);
@@ -292,6 +308,7 @@ public class ApplicationController implements SimulationListener, Simulator {
         CommandParser commandParser = new CommandParser();
         try {
             commandParser.parseRobotProgram(file);
+            this.simulationController.getProgram().clear();
             commandParser.getCommands().forEach(c -> this.simulationController.getProgram().add(c));
         } catch (CommandException | IOException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Error while parsing the file: " + e);
@@ -302,6 +319,7 @@ public class ApplicationController implements SimulationListener, Simulator {
 
     private void updateShapeInfo(File file) {
         try {
+            shapesLoadedDetails.clear();
             List<String> lines = Files.readAllLines(file.toPath());
             lines.forEach(s -> shapesLoadedDetails.appendText(s + "\n"));
         } catch (IOException e) {
@@ -311,6 +329,7 @@ public class ApplicationController implements SimulationListener, Simulator {
 
     private void updateProgramInfo(File file) {
         try {
+            programLoadedDetails.clear();
             List<String> lines = Files.readAllLines(file.toPath());
             lines.forEach(s -> programLoadedDetails.appendText(s + "\n"));
         } catch (IOException e) {
@@ -327,11 +346,26 @@ public class ApplicationController implements SimulationListener, Simulator {
         updateChart();
     }
 
+    @Override
     public void simulate(double dt, double time) {
-        double currentTime = 0;
-        while (currentTime < time) {
-            this.simulationController.step();
-            currentTime += dt;
+        try {
+            this.handleEnablingSimulationButton(true);
+            Timeline simulationTimeline = new Timeline(new KeyFrame(
+                    Duration.seconds(dt),
+                    event -> simulationController.step()
+            ));
+            simulationTimeline.setCycleCount((int) Math.ceil(time / dt));
+
+            simulationTimeline.setOnFinished(actionEvent ->
+                    Platform.runLater(() -> {
+                        showAlert(Alert.AlertType.INFORMATION, "Simulation", "Simulation finished.");
+                        this.handleEnablingSimulationButton(false);
+                    })
+            );
+
+            simulationTimeline.play();
+        } catch (Exception e) {
+            this.showAlert(Alert.AlertType.ERROR, "Simulation", "Error while simulating: " + e);
         }
     }
 }
