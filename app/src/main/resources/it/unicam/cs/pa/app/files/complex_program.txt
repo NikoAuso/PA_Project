@@ -1,0 +1,27 @@
+REPEAT 2
+    MOVE RANDOM -0.5 0.2 0.1 0.8 1.0
+    SIGNAL exploring
+    CONTINUE 5
+    UNSIGNAL exploring
+    MOVE RANDOM 0.2 0.8 -0.1 0.9 0.4
+    SIGNAL exploring
+    CONTINUE 5
+    UNSIGNAL exploring
+    REPEAT 3
+        MOVE RANDOM -0.8 -0.2 0.2 0.8 0.7
+        SIGNAL exploring
+        CONTINUE 5
+        UNSIGNAL exploring
+    DONE
+DONE
+DO FOREVER
+    UNTIL shape_a
+        MOVE RANDOM -0.4 0.4 0.5 -0.5 0.5
+        FOLLOW exploring 10 1.0
+    DONE
+    SIGNAL exploring
+    REPEAT 3
+        MOVE RANDOM 0.1 0.2 0.3 0.4 0.3
+        CONTINUE 5
+    DONE
+DONE

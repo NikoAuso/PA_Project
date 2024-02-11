@@ -23,6 +23,11 @@ public class BasicRobot implements Robot {
     private int finishLoopIndex;
     private final Deque<Integer> loopCounts;
 
+    /**
+     * Constructs a new BasicRobot with the given initial position.
+     *
+     * @param position The initial position of the robot.
+     */
     public BasicRobot(Position position) {
         this.position = position;
         this.currentLabel = "";
@@ -112,13 +117,18 @@ public class BasicRobot implements Robot {
      * ______________________________________________
      */
     @Override
-    public int getCurrentCommandIndex() {
+    public int currentCommandIndex() {
         return this.currentCommandIndex;
     }
 
     @Override
     public void increaseCurrentCommandIndex() {
         this.currentCommandIndex++;
+    }
+
+    @Override
+    public void decreaseCurrentCommandIndex() {
+        this.currentCommandIndex--;
     }
 
     @Override
@@ -134,7 +144,7 @@ public class BasicRobot implements Robot {
 
     @Override
     public void pushLoopCount(int count, int index) {
-        if (!this.startingLoopIndices.isEmpty() || this.startingLoopIndices.getFirst() != index)
+        if (!this.startingLoopIndices.isEmpty() && this.startingLoopIndices.contains(index))
             this.loopCounts.push(count);
     }
 

@@ -22,7 +22,7 @@ public class App extends Application {
         stage.setScene(new Scene(fxmlLoader.load()));
         stage.setTitle("RobotSwarm");
         stage.setResizable(false);
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("robotSwarm.png"))));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("robotSwarm.jpg"))));
 
         stage.show();
     }

@@ -1,10 +1,7 @@
 package it.unicam.cs.pa.robot.commands;
 
 import it.unicam.cs.pa.environment.Position;
-import it.unicam.cs.pa.robot.commands.loop.DoForever;
-import it.unicam.cs.pa.robot.commands.loop.Done;
-import it.unicam.cs.pa.robot.commands.loop.Repeat;
-import it.unicam.cs.pa.robot.commands.loop.Until;
+import it.unicam.cs.pa.robot.commands.loop.*;
 import it.unicam.cs.pa.robot.commands.movement.*;
 
 import java.io.File;
@@ -98,19 +95,19 @@ public final class CommandParser {
             throwSyntaxErrorException();
         }
     }
+
+    private void addContinueMethod(String[] elements) {
+        if (elements.length == 2) {
+            commands.add(new Continue(Integer.parseInt(elements[1]), linecounter - 1));
+        } else {
+            throwSyntaxErrorException();
+        }
+    }
     /*###################################################*/
 
 
     // Movement commands
     /*###################################################*/
-    private void addContinueMethod(String[] elements) {
-        if (elements.length == 2) {
-            commands.add(new Continue(Double.parseDouble(elements[1])));
-        } else {
-            throwSyntaxErrorException();
-        }
-    }
-
     private void addStopMethod(String[] elements) {
         if (elements.length == 1) {
             commands.add(new Stop());

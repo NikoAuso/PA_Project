@@ -26,6 +26,6 @@ public enum RobotCommands {
     }
 
     static Optional<RobotCommands> selectCommand(String line) {
-        return Stream.of(RobotCommands.values()).filter(c -> c.isCommandOfLine(line)).findFirst();
+        return Stream.of(RobotCommands.values()).filter(c -> c.isCommandOfLine(line.trim())).findFirst();
     }
 }

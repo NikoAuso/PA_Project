@@ -20,4 +20,5 @@ javafx {
 application {
     // Define the main class for the application.
     mainClass.set("it.unicam.cs.pa.app.App")
+    mainModule.set("it.unicam.cs.pa.app")
 }
