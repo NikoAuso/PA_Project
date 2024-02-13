@@ -144,7 +144,7 @@ public class ChartController {
     }
 
     /**
-     * Adds a circle shape to the chart.
+     * Adds a circle shape to the chart. Set the border and add the label
      *
      * @param shape The circle shape to add
      */

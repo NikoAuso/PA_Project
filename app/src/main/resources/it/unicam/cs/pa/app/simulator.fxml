@@ -40,10 +40,11 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="window" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.pa.app.ApplicationController">
+<VBox fx:id="window" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.pa.app.ApplicationController">
     <SplitPane dividerPositions="0.2505567928730512, 0.5" focusTraversable="true" VBox.vgrow="ALWAYS">
         <AnchorPane maxWidth="200.0" minWidth="200.0" SplitPane.resizableWithParent="false">
             <SplitPane dividerPositions="0.28859060402684567, 0.6577181208053692" orientation="VERTICAL" prefHeight="598.0" prefWidth="222.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -114,8 +115,41 @@
                     <NumberAxis fx:id="yAxis" side="LEFT" />
                 </yAxis>
             </ScatterChart>
-         <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="176.0" prefHeight="50.0" style="&#10;" text="Simulation view">
-         </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="176.0" prefHeight="50.0" style="&#10;" text="Simulation view">
+            </Label>
+            <Pane layoutX="136.0" layoutY="515.0" prefHeight="83.0" prefWidth="486.0" AnchorPane.bottomAnchor="0.0"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="515.0">
+                <Label layoutX="13.0" layoutY="13.0" text="Step n°: ">
+                    <font>
+                        <Font size="12.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="13.0" layoutY="55.0" text="Time for each instruction: ">
+                    <font>
+                        <Font size="12.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="13.0" layoutY="34.0" text="Total time: ">
+                    <font>
+                        <Font size="12.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="countStepLabel" layoutX="182.0" layoutY="13.0" prefHeight="17.0" prefWidth="91.0">
+                    <font>
+                        <Font size="12.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="timeLabel" layoutX="182.0" layoutY="34.0" prefHeight="17.0" prefWidth="91.0">
+                    <font>
+                        <Font size="12.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="dtLabel" layoutX="182.0" layoutY="55.0" prefHeight="17.0" prefWidth="91.0">
+                    <font>
+                        <Font size="12.0"/>
+                    </font>
+                </Label>
+            </Pane>
         </AnchorPane>
         <AnchorPane maxWidth="200.0" minWidth="200.0" SplitPane.resizableWithParent="false">
             <Label alignment="CENTER" font="$mainLabel" layoutX="14.0" layoutY="14.0" prefHeight="50.0" prefWidth="200.0" style="&#10;" text="Details" textAlignment="CENTER" AnchorPane.bottomAnchor="571.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />

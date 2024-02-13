@@ -3,7 +3,6 @@ package it.unicam.cs.pa.robot.commands.loop;
 import it.unicam.cs.pa.environment.Environment;
 import it.unicam.cs.pa.robot.Robot;
 import it.unicam.cs.pa.robot.commands.CommandException;
-import it.unicam.cs.pa.robot.commands.movement.MovementCommand;
 
 public record Continue(int duration, int startingIndex) implements LoopCommand {
     @Override
@@ -11,7 +10,7 @@ public record Continue(int duration, int startingIndex) implements LoopCommand {
         robot.pushStartingLoopIndex(startingIndex);
         robot.pushLoopCount(duration, startingIndex);
         robot.setFinishLoopIndex();
-        robot.decreaseCurrentCommandIndex();
+        robot.resetLoopIndex();
         robot.decreaseLoopCount();
     }
 }

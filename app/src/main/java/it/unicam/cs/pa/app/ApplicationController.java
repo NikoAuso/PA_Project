@@ -15,10 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
@@ -39,12 +36,22 @@ import java.util.Optional;
 public class ApplicationController implements SimulationListener, Simulator {
     private SimulationController simulationController;  // Manages the simulation logic
     private ChartController chartController;            // Manages the chart display
+    private int countStep;
 
     @FXML
     public VBox window;
 
     @FXML
     private Font mainLabel;
+
+    @FXML
+    public Label countStepLabel;
+
+    @FXML
+    public Label timeLabel;
+
+    @FXML
+    public Label dtLabel;
 
     @FXML
     private Button loadShapeButton;
@@ -117,6 +124,7 @@ public class ApplicationController implements SimulationListener, Simulator {
         );
         chartController = new ChartController(chart, xAxis, yAxis, simulationController);
         checkIfSimulationCanStart();
+        countStep = 0;
     }
 
     /**
@@ -333,18 +341,19 @@ public class ApplicationController implements SimulationListener, Simulator {
     }
 
     /**
-     * Checks if the simulation can start based on the loaded environment shapes, robot programs, and generated robots.
+     * Checks if the simulation can start. If the environment shapes, robot programs, and generated robots are
+     * present in the simulation controller, the simulation can start.
      * Enables or disables simulation-related buttons accordingly.
      */
     private void checkIfSimulationCanStart() {
         if (!this.simulationController.getEnvironment().getShapes().isEmpty() &&
                 !this.simulationController.getEnvironment().getRobots().isEmpty() &&
                 !this.simulationController.getProgram().isEmpty()) {
-            handleEnablingSimulationButton(false);
-            handleEnablingConfigurationButton(true);
+            disableSimulationButton(false);
+            disableConfigurationButton(true);
         } else {
-            handleEnablingSimulationButton(true);
-            handleEnablingConfigurationButton(false);
+            disableSimulationButton(true);
+            disableConfigurationButton(false);
         }
     }
 
@@ -354,7 +363,7 @@ public class ApplicationController implements SimulationListener, Simulator {
      *
      * @param s True to disable the buttons, false to enable them.
      */
-    private void handleEnablingConfigurationButton(boolean s) {
+    private void disableConfigurationButton(boolean s) {
         loadShapeButton.setDisable(s);
         loadProgramButton.setDisable(s);
         generateRobotsButton.setDisable(s);
@@ -362,11 +371,11 @@ public class ApplicationController implements SimulationListener, Simulator {
 
     /**
      * Enables or disables the simulation buttons based on the provided boolean value.
-     * Simulation buttons include starting, pausing, and resetting the simulation.
+     * Simulation buttons include start, move one step and resetting.
      *
      * @param s True to disable the buttons, false to enable them.
      */
-    private void handleEnablingSimulationButton(boolean s) {
+    private void disableSimulationButton(boolean s) {
         startSimulation.setDisable(s);
         startSimulationStepped.setDisable(s);
         resetButton.setDisable(s);
@@ -496,6 +505,19 @@ public class ApplicationController implements SimulationListener, Simulator {
     }
 
     /**
+     * Updates the countStepLabel with the value of the countStep. The argument passed is used to show the total
+     * amount of step to be executed.
+     *
+     * @param dt   The duration of each simulation step.
+     * @param time The total duration of the simulation.
+     */
+    private void updateStepInfo(double dt, double time) {
+        countStepLabel.setText(countStep + "/" + time / dt);
+        timeLabel.setText(String.valueOf(time));
+        dtLabel.setText(String.valueOf(dt));
+    }
+
+    /**
      * Updates the chart display by running the updateChart method in the JavaFX application thread.
      */
     private void updateChart() {
@@ -520,18 +542,24 @@ public class ApplicationController implements SimulationListener, Simulator {
     @Override
     public void simulate(double dt, double time) {
         try {
-            this.handleEnablingSimulationButton(true);
+            this.disableSimulationButton(true);
             Timeline simulationTimeline = new Timeline(new KeyFrame(
                     Duration.seconds(dt),
-                    event -> simulationController.step()
+                    event -> {
+                        simulationController.step();
+                        countStep++;
+                        updateStepInfo(dt, time);
+                    }
             ));
             simulationTimeline.setCycleCount((int) Math.ceil(time / dt));
 
-            simulationTimeline.setOnFinished(actionEvent ->
-                    Platform.runLater(() -> {
-                        showAlert(Alert.AlertType.INFORMATION, "Simulation", "Simulation finished.");
-                        this.handleEnablingSimulationButton(false);
-                    })
+            simulationTimeline.setOnFinished(actionEvent -> {
+                        Platform.runLater(() -> {
+                            showAlert(Alert.AlertType.INFORMATION, "Simulation", "Simulation finished.");
+                            this.disableSimulationButton(false);
+                        });
+                        countStep = 0;
+                    }
             );
 
             simulationTimeline.play();
