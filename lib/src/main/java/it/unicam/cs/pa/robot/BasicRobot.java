@@ -132,11 +132,6 @@ public class BasicRobot implements Robot {
     }
 
     @Override
-    public void decreaseCurrentCommandIndex() {
-        this.currentCommandIndex--;
-    }
-
-    @Override
     public void setFinishLoopIndex() {
         this.finishLoopIndex = currentCommandIndex + 1;
     }

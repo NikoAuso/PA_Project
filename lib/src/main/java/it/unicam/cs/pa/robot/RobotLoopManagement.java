@@ -19,12 +19,6 @@ public interface RobotLoopManagement {
     void increaseCurrentCommandIndex();
 
     /**
-     * /**
-     * Decreases the current command index by one.
-     */
-    void decreaseCurrentCommandIndex();
-
-    /**
      * Sets the index indicating the end of a loop execution.
      */
     void setFinishLoopIndex();
