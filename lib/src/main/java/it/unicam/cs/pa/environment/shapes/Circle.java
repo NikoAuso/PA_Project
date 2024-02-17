@@ -14,6 +14,7 @@ public record Circle(Position center, double radius, String label) implements Sh
      *
      * @param center The center position of the circle.
      * @param radius The radius of the circle.
+     * @param label The label of the circle.
      * @throws ShapeException if the radius is not a positive value.
      */
     public Circle(Position center, double radius, String label) {
@@ -26,12 +27,12 @@ public record Circle(Position center, double radius, String label) implements Sh
     }
 
     @Override
-    public ShapeType getType(){
+    public ShapeType getType() {
         return ShapeType.CIRCLE;
     }
 
     @Override
-    public String getLabel(){
+    public String getLabel() {
         return this.label;
     }
 
@@ -39,28 +40,5 @@ public record Circle(Position center, double radius, String label) implements Sh
     public boolean contains(Position toCheckPosition) {
         double distance = this.center().distanceTo(toCheckPosition);
         return distance <= this.radius();
-    }
-
-    @Override
-    public boolean equals(Shape s) {
-        if (s == this) {
-            return true;
-        } else if (!(s instanceof Circle r)) {
-            return false;
-        } else {
-            return this.center().x() == r.center().x() &&
-                    this.center().y() == r.center().y() &&
-                    this.radius() == r.radius();
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "Shape: " + this.getClass().getSimpleName() + "->[" +
-                "X=" + this.center().x() + ", " +
-                "Y=" + this.center().y() + ", " +
-                "R=" + this.radius() + ", " +
-                "Label=" + this.label() + "]";
-
     }
 }

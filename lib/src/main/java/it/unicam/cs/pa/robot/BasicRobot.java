@@ -8,7 +8,7 @@ import java.util.Deque;
 import java.util.List;
 
 /**
- * A basic implementation of the Robot interface representing a robot in the simulated swarm.
+ * A basic implementation representing a robot in the swarm.
  */
 public class BasicRobot implements Robot {
     private Position position;
@@ -41,7 +41,7 @@ public class BasicRobot implements Robot {
     }
 
 
-    /*______________________________________________
+    /* ______________________________________________
      * Methods for "Robot" interface
      * ______________________________________________
      */
@@ -56,14 +56,22 @@ public class BasicRobot implements Robot {
     }
 
     @Override
+    public double speed() {
+        return this.speed;
+    }
+
+    @Override
     public String currentLabel() {
         return currentLabel;
     }
 
     @Override
     public void setDirection(Position direction) {
-        double module = Math.hypot(direction.x(), direction.y());
-        this.direction = new Position(direction.x() / module, direction.y() / module);
+        double deltaX = direction.x() - this.position.x();
+        double deltaY = direction.y() - this.position.y();
+
+        double module = Math.hypot(deltaX, deltaY);
+        this.direction = new Position(deltaX / module, deltaY / module);
     }
 
     @Override
@@ -78,19 +86,11 @@ public class BasicRobot implements Robot {
 
     @Override
     public void move() {
-        if (!this.canMove)
-            throw new RobotException("This robot can't move anymore");
-
         double newX = this.position().x() + this.direction().x() * speed;
         double newY = this.position().y() + this.direction().y() * speed;
 
         if (Double.isFinite(newX) && Double.isFinite(newY))
             this.position = new Position(newX, newY);
-    }
-
-    @Override
-    public void stop() {
-        this.canMove = false;
     }
 
     @Override
@@ -111,10 +111,15 @@ public class BasicRobot implements Robot {
         return this.signalingLabels.contains(label);
     }
 
+    @Override
+    public void stop() {
+        this.canMove = false;
+    }
 
-    /*______________________________________________
+
+    /* ________________________________________________
      * Methods for "RobotCommandManagement" interface
-     * ______________________________________________
+     * ________________________________________________
      */
     @Override
     public int currentCommandIndex() {

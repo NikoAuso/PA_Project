@@ -1,0 +1,9 @@
+DO FOREVER
+    FOLLOW exploring 30 1.0
+    UNTIL shape_f
+        MOVE RANDOM -0.5 0.4 0.8 -0.2 1.0
+        SIGNAL exploring
+    DONE
+    STOP
+    UNSIGNAL exploring
+DONE

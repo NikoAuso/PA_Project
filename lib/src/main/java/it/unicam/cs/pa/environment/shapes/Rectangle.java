@@ -15,6 +15,7 @@ public record Rectangle(Position center, double width, double height, String lab
      * @param center The center position of the rectangle.
      * @param width  The width of the rectangle.
      * @param height The height of the rectangle.
+     * @param label The label of the rectangle.
      * @throws ShapeException if height or width is not a positive value.
      */
     public Rectangle(Position center, double width, double height, String label) {
@@ -46,30 +47,5 @@ public record Rectangle(Position center, double width, double height, String lab
         double halfHeight = this.height() / 2.0;
 
         return distanceX <= halfWidth && distanceY <= halfHeight;
-    }
-
-    @Override
-    public boolean equals(Shape s) {
-        if (s == this) {
-            return true;
-        } else if (!(s instanceof Rectangle r)) {
-            return false;
-        } else {
-            return this.center().x() == r.center().x() &&
-                    this.center().y() == r.center().y() &&
-                    this.width() == r.width() &&
-                    this.height() == r.height();
-        }
-    }
-
-    @Override
-    public String toString() {
-        String description = this.getClass().getSimpleName();
-        return "Shape: " + description + "->[" +
-                "X=" + this.center().x() + ", " +
-                "Y=" + this.center().y() + ", " +
-                "W=" + this.width() + ", " +
-                "H=" + this.height() + ", " +
-                "Label=" + this.label() + "]";
     }
 }

@@ -1,0 +1,3 @@
+UNTIL test_label
+    MOVE RANDOM 0.8 -1 -0.3 0.4 0.8
+DONE

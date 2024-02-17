@@ -49,7 +49,7 @@ public class SimulationController {
      */
     public void step() {
         environment.getRobots().parallelStream()
-                .filter(Robot::canMove)
+                //.filter(Robot::canMove)
                 .forEach(r -> {
                     if (r.currentCommandIndex() < program.size()) {
                         Command c = program.get(r.currentCommandIndex());

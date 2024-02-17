@@ -5,6 +5,11 @@ plugins {
     id("it.unicam.cs.pa.java-library-conventions")
 }
 
-dependencies{
+dependencies {
     implementation("org.apache.commons:commons-lang3:3.12.0")
+}
+
+tasks.javadoc {
+    source(sourceSets.main.get().allJava)
+    setDestinationDir(file("$rootDir/docs/javadoc/${project.name}"))
 }

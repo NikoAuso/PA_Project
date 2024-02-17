@@ -5,11 +5,11 @@ package it.unicam.cs.pa.environment.shapes;
  */
 public interface ShapeFactory {
     /**
-     * Creates a shape based on the provided label, shape type, and arguments.
+     * Creates a shape based on the provided parameters.
      *
-     * @param label      The label for the shape.
-     * @param shapeType  The type of shape to create (e.g., "CIRCLE", "RECTANGLE").
-     * @param args       The arguments needed to create the shape.
+     * @param label     The label for the shape.
+     * @param shapeType The type of shape to create (e.g., "CIRCLE", "RECTANGLE").
+     * @param args      The arguments needed to create the shape.
      * @return A new instance of the specified shape.
      */
     Shape createShape(String label, ShapeType shapeType, double[] args);

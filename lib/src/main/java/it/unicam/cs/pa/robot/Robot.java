@@ -3,9 +3,10 @@ package it.unicam.cs.pa.robot;
 import it.unicam.cs.pa.environment.Position;
 
 /**
- * The Robot interface represents a robot capable of executing commands and interacting with its environment.
+ * The Robot interface represents a robot, capable of moving, signaling or stopping signaling conditions and
+ * stopping its movement.
  */
-public interface Robot extends RobotCommandManagement {
+public interface Robot extends RobotMovementManagement, RobotLoopManagement {
 
     /**
      * Gets the current position of the robot.
@@ -15,11 +16,18 @@ public interface Robot extends RobotCommandManagement {
     Position position();
 
     /**
-     * Gets the direction in which the robot is facing.
+     * Gets the speed at which the robot is moving.
+     *
+     * @return The speed of the robot.
+     */
+    Position direction();
+
+    /**
+     * Gets the speed in which the robot is facing.
      *
      * @return The direction of the robot.
      */
-    Position direction();
+    double speed();
 
     /**
      * Gets the label that the robot is currently signaling.
@@ -41,43 +49,4 @@ public interface Robot extends RobotCommandManagement {
      * @param speed The speed of the robot.
      */
     void setSpeed(double speed);
-
-    /**
-     * Checks if the robot is able to move.
-     *
-     * @return True if the robot can move, false otherwise.
-     */
-    boolean canMove();
-
-    /**
-     * Moves the robot in the current direction at the specified speed.
-     */
-    void move();
-
-    /**
-     * Signals a condition with the specified label.
-     *
-     * @param label The label of the condition to be signaled.
-     */
-    void signal(String label);
-
-    /**
-     * Stops signaling a condition with the specified label.
-     *
-     * @param label The label of the condition to stop signaling.
-     */
-    void unsignal(String label);
-
-    /**
-     * Checks if the robot is currently signaling a condition with the specified label.
-     *
-     * @param label The label of the condition to check.
-     * @return True if the robot is signaling the condition, false otherwise.
-     */
-    boolean isSignaling(String label);
-
-    /**
-     * Stops the robot from moving.
-     */
-    void stop();
 }

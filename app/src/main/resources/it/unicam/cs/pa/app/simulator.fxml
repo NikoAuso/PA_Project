@@ -32,90 +32,117 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.ScatterChart?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-<VBox fx:id="window" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.pa.app.ApplicationController">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<VBox fx:id="window" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.pa.app.ApplicationController">
     <SplitPane dividerPositions="0.2505567928730512, 0.5" focusTraversable="true" VBox.vgrow="ALWAYS">
         <AnchorPane maxWidth="200.0" minWidth="200.0" SplitPane.resizableWithParent="false">
-            <SplitPane dividerPositions="0.28859060402684567, 0.6577181208053692" orientation="VERTICAL" prefHeight="598.0" prefWidth="222.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <SplitPane dividerPositions="0.28859060402684567, 0.6577181208053692" orientation="VERTICAL"
+                       prefHeight="598.0" prefWidth="222.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                       AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <AnchorPane minHeight="200.0" minWidth="0.0" prefHeight="151.0" prefWidth="220.0">
-                    <Label alignment="CENTER" contentDisplay="CENTER" minWidth="60.0" prefHeight="50.0" prefWidth="198.0" style="&#10;" text="Configuration files" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <Label alignment="CENTER" contentDisplay="CENTER" minWidth="60.0" prefHeight="50.0"
+                           prefWidth="198.0" style="&#10;" text="Configuration files" AnchorPane.bottomAnchor="150.0"
+                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                         <font>
-                            <Font fx:id="mainLabel" size="18.0" />
+                            <Font fx:id="mainLabel" size="18.0"/>
                         </font>
                     </Label>
-                    <VBox layoutY="50.0" prefHeight="144.0" prefWidth="220.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
-                        <Button fx:id="loadShapeButton" layoutX="23.0" layoutY="60.0" mnemonicParsing="false" onAction="#handleLoadShapeButton" prefHeight="26.0" prefWidth="190.0" text="Load shape">
+                    <VBox layoutY="50.0" prefHeight="144.0" prefWidth="220.0" AnchorPane.bottomAnchor="0.0"
+                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+                        <Button fx:id="loadShapeButton" layoutX="23.0" layoutY="60.0" mnemonicParsing="false"
+                                onAction="#handleLoadShapeButton" prefHeight="26.0" prefWidth="190.0" text="Load shape">
                             <VBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="loadProgramButton" layoutX="23.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleLoadProgramButton" prefHeight="26.0" prefWidth="190.0" text="Load program">
+                        <Button fx:id="loadProgramButton" layoutX="23.0" layoutY="100.0" mnemonicParsing="false"
+                                onAction="#handleLoadProgramButton" prefHeight="26.0" prefWidth="190.0"
+                                text="Load program">
                             <VBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="generateRobotsButton" layoutX="23.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleGenerateRobotsButton" prefHeight="26.0" prefWidth="190.0" text="Generate random robots">
+                        <Button fx:id="generateRobotsButton" layoutX="23.0" layoutY="140.0" mnemonicParsing="false"
+                                onAction="#handleGenerateRobotsButton" prefHeight="26.0" prefWidth="190.0"
+                                text="Generate random robots">
                             <VBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                             </VBox.margin>
                         </Button>
                     </VBox>
                 </AnchorPane>
                 <AnchorPane minHeight="200.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                    <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="-7.0" layoutY="8.0" minWidth="60.0" prefHeight="50.0" prefWidth="220.0" style="&#10;" text="Simulation controls" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="-7.0" layoutY="8.0"
+                           minWidth="60.0" prefHeight="50.0" prefWidth="220.0" style="&#10;" text="Simulation controls"
+                           AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                           AnchorPane.topAnchor="0.0">
                     </Label>
-                    <VBox layoutY="50.0" prefHeight="200.0" prefWidth="220.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
-                        <Button fx:id="startSimulation" layoutX="25.0" layoutY="60.0" mnemonicParsing="false" onAction="#handleStartSimulation" prefHeight="26.0" prefWidth="190.0" text="Start simulation">
+                    <VBox layoutY="50.0" prefHeight="200.0" prefWidth="220.0" AnchorPane.bottomAnchor="0.0"
+                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+                        <Button fx:id="startSimulation" layoutX="25.0" layoutY="60.0" mnemonicParsing="false"
+                                onAction="#handleStartSimulation" prefHeight="26.0" prefWidth="190.0"
+                                text="Start simulation">
                             <VBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="startSimulationStepped" layoutX="25.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleStartSimulationStepped" prefHeight="26.0" prefWidth="190.0" text="Move one step">
+                        <Button fx:id="startSimulationStepped" layoutX="25.0" layoutY="100.0" mnemonicParsing="false"
+                                onAction="#handleStartSimulationStepped" prefHeight="26.0" prefWidth="190.0"
+                                text="Move one step">
                             <VBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="resetButton" layoutX="25.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleResetButton" prefHeight="26.0" prefWidth="190.0" text="Reset">
+                        <Button fx:id="resetButton" layoutX="25.0" layoutY="140.0" mnemonicParsing="false"
+                                onAction="#handleResetButton" prefHeight="26.0" prefWidth="190.0" text="Reset">
                             <VBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                             </VBox.margin>
                         </Button>
                     </VBox>
                 </AnchorPane>
                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                    <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="-2.0" layoutY="43.0" prefHeight="50.0" style="&#10;" text="View controls" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="-2.0" layoutY="43.0"
+                           prefHeight="50.0" style="&#10;" text="View controls" AnchorPane.leftAnchor="0.0"
+                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     </Label>
-                    <Button fx:id="panLeftButton" accessibleText="Move left" layoutX="8.0" layoutY="91.0" mnemonicParsing="false" onAction="#handlePanLeftButton" text="&lt;" />
-                    <Button fx:id="panRightButton" accessibleText="Move right" layoutX="66.0" layoutY="91.0" mnemonicParsing="false" onAction="#handlePanRightButton" text="&gt;" />
-                    <Button fx:id="zoomOutButton" accessibleText="Zoom out" layoutX="99.0" layoutY="107.0" mnemonicParsing="false" onAction="#handleZoomOutButton" prefHeight="26.0" prefWidth="91.0" text="Zoom out" />
-                    <Button fx:id="zoomInButton" accessibleText="Zoom in" layoutX="99.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleZoomInButton" prefHeight="26.0" prefWidth="91.0" text="Zoom in" />
-                    <Button fx:id="panDownButton" accessibleText="Move down" layoutX="37.0" layoutY="120.0" mnemonicParsing="false" onAction="#handlePanDownButton" rotate="180.0" text="^" />
-                    <Button fx:id="panUpButton" accessibleText="Move up" layoutX="37.0" layoutY="62.0" mnemonicParsing="false" onAction="#handlePanUpButton" text="^" />
-                    <Button fx:id="panCenterButton" accessibleText="Center view" layoutX="37.0" layoutY="91.0" mnemonicParsing="false" onAction="#handlePanCenterButton" text="o" />
+                    <Button fx:id="panLeftButton" accessibleText="Move left" layoutX="8.0" layoutY="91.0"
+                            mnemonicParsing="false" onAction="#handlePanLeftButton" text="&lt;"/>
+                    <Button fx:id="panRightButton" accessibleText="Move right" layoutX="66.0" layoutY="91.0"
+                            mnemonicParsing="false" onAction="#handlePanRightButton" text="&gt;"/>
+                    <Button fx:id="zoomOutButton" accessibleText="Zoom out" layoutX="99.0" layoutY="107.0"
+                            mnemonicParsing="false" onAction="#handleZoomOutButton" prefHeight="26.0" prefWidth="91.0"
+                            text="Zoom out"/>
+                    <Button fx:id="zoomInButton" accessibleText="Zoom in" layoutX="99.0" layoutY="78.0"
+                            mnemonicParsing="false" onAction="#handleZoomInButton" prefHeight="26.0" prefWidth="91.0"
+                            text="Zoom in"/>
+                    <Button fx:id="panDownButton" accessibleText="Move down" layoutX="37.0" layoutY="120.0"
+                            mnemonicParsing="false" onAction="#handlePanDownButton" rotate="180.0" text="^"/>
+                    <Button fx:id="panUpButton" accessibleText="Move up" layoutX="37.0" layoutY="62.0"
+                            mnemonicParsing="false" onAction="#handlePanUpButton" text="^"/>
+                    <Button fx:id="panCenterButton" accessibleText="Center view" layoutX="37.0" layoutY="91.0"
+                            mnemonicParsing="false" onAction="#handlePanCenterButton" text="o"/>
                 </AnchorPane>
             </SplitPane>
         </AnchorPane>
         <AnchorPane>
-            <ScatterChart fx:id="chart" animated="false" layoutX="18.0" layoutY="74.0" maxHeight="450.0" maxWidth="450.0" minHeight="450.0" minWidth="450.0">
+            <ScatterChart fx:id="chart" animated="false" layoutX="18.0" layoutY="74.0" maxHeight="450.0"
+                          maxWidth="450.0" minHeight="450.0" minWidth="450.0">
                 <xAxis>
-                    <NumberAxis side="BOTTOM" fx:id="xAxis" />
+                    <NumberAxis side="BOTTOM" fx:id="xAxis"/>
                 </xAxis>
                 <yAxis>
-                    <NumberAxis fx:id="yAxis" side="LEFT" />
+                    <NumberAxis fx:id="yAxis" side="LEFT"/>
                 </yAxis>
             </ScatterChart>
-            <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="176.0" prefHeight="50.0" style="&#10;" text="Simulation view">
+            <Label alignment="CENTER" contentDisplay="CENTER" font="$mainLabel" layoutX="176.0" prefHeight="50.0"
+                   style="&#10;" text="Simulation view">
             </Label>
             <Pane layoutX="136.0" layoutY="515.0" prefHeight="83.0" prefWidth="486.0" AnchorPane.bottomAnchor="0.0"
                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="515.0">
@@ -152,28 +179,34 @@
             </Pane>
         </AnchorPane>
         <AnchorPane maxWidth="200.0" minWidth="200.0" SplitPane.resizableWithParent="false">
-            <Label alignment="CENTER" font="$mainLabel" layoutX="14.0" layoutY="14.0" prefHeight="50.0" prefWidth="200.0" style="&#10;" text="Details" textAlignment="CENTER" AnchorPane.bottomAnchor="571.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <VBox AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
-                <Label alignment="CENTER" prefHeight="25.0" prefWidth="200.0" style="&#10;" text="Loaded shapes details">
+            <Label alignment="CENTER" font="$mainLabel" layoutX="14.0" layoutY="14.0" prefHeight="50.0"
+                   prefWidth="200.0" style="&#10;" text="Details" textAlignment="CENTER" AnchorPane.bottomAnchor="571.0"
+                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+            <VBox AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="50.0">
+                <Label alignment="CENTER" prefHeight="25.0" prefWidth="200.0" style="&#10;"
+                       text="Loaded shapes details">
                     <font>
-                        <Font size="12.0" />
+                        <Font size="12.0"/>
                     </font>
                 </Label>
                 <TextArea fx:id="shapesLoadedDetails" editable="false" prefHeight="225.0" prefWidth="180.0">
                     <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                     </VBox.margin>
                 </TextArea>
             </VBox>
-            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="325.0">
-                <Label alignment="CENTER" prefHeight="25.0" prefWidth="200.0" style="&#10;" text="Loaded program details">
+            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="325.0">
+                <Label alignment="CENTER" prefHeight="25.0" prefWidth="200.0" style="&#10;"
+                       text="Loaded program details">
                     <font>
-                        <Font size="12.0" />
+                        <Font size="12.0"/>
                     </font>
                 </Label>
                 <TextArea fx:id="programLoadedDetails" editable="false" prefHeight="225.0" prefWidth="180.0">
                     <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                     </VBox.margin>
                 </TextArea>
             </VBox>

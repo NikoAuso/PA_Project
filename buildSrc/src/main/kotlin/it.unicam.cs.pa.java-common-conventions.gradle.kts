@@ -7,6 +7,8 @@ plugins {
     java
 }
 
+group = "it.unicam.cs.pa"
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()

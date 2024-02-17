@@ -8,17 +8,22 @@ import it.unicam.cs.pa.robot.commands.CommandException;
 import java.util.stream.Collectors;
 
 /**
- * Class representing the Follow command. The robot that executes this class sets its direction based on the average
- * of the positions of the robots that are reporting a certain "label" and that are within a certain dist distance.
- * If there is no robot reporting that label, then the robot's direction will be set randomly in the range
- * [-dist, dist]x[-dist, dist]. Furthermore, the movement speed of the robot is also set.
+ * Class representing the FOLLOW command. The robot that executes this command sets its direction based on the average
+ * positions of the robots that are reporting a certain label and are within a specified distance ("dist").
+ * If no robot is reporting that label, the robot's direction will be set randomly within the range
+ * [-dist, dist]x[-dist, dist]. Additionally, the movement speed of the robot is also set.
+ * It implements the {@link MovementCommand} interface.
+ *
+ * @param label the label to follow
+ * @param dist  the maximum distance within which robots are considered for averaging their positions
+ * @param speed the movement speed of the robot
  */
 public record Follow(String label, double dist, double speed) implements MovementCommand {
     /**
-     * Executes the follow command by adjusting the direction of the robot.
+     * Executes the Follow command by setting the direction of the robot.
      *
-     * @param environment       the environment in which the robot operates
-     * @param robot             the robot executing the command
+     * @param environment the environment in which the robot operates
+     * @param robot       the robot executing the command
      * @throws CommandException if an error occurs during command execution
      */
     @Override

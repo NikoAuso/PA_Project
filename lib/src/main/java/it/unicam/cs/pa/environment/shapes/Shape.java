@@ -3,21 +3,21 @@ package it.unicam.cs.pa.environment.shapes;
 import it.unicam.cs.pa.environment.Position;
 
 /**
- * An interface representing a geometric shape in a 2D space. Classes that implement it should provide
+ * An interface representing a geometric shape in a 2D space. Classes that implement this interface should provide
  * methods for containment check, equality comparison, and a string representation of the shape.
  */
-public interface Shape{
+public interface Shape {
     /**
      * Get the type of the shape.
      *
-     * @return type of the shape
+     * @return The type of the shape.
      */
     ShapeType getType();
 
     /**
      * Get the label of the shape.
      *
-     * @return label of the shape
+     * @return The label of the shape.
      */
     String getLabel();
 
@@ -28,19 +28,4 @@ public interface Shape{
      * @return true if the position is inside the shape, false otherwise.
      */
     boolean contains(Position toCheckPosition);
-
-    /**
-     * Compares the shape with another Shape for equality.
-     *
-     * @param shape The shape to compare with.
-     * @return true if the shapes are equal, false otherwise.
-     */
-    boolean equals(Shape shape);
-
-    /**
-     * Returns a string representation of the shape.
-     *
-     * @return String representation of the shape.
-     */
-    String toString();
 }

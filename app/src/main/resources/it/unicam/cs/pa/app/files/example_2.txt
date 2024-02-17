@@ -1,0 +1,11 @@
+DO FOREVER
+    UNTIL shape_b
+        FOLLOW exploring 300 1.0
+    DONE
+    SIGNAL exploring
+    REPEAT 3
+        MOVE RANDOM 0.8 -1 -0.3 0.4 0.8
+        CONTINUE 5
+    DONE
+    UNSIGNAL exploring
+DONE
