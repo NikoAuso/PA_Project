@@ -3,9 +3,11 @@ DO FOREVER
         FOLLOW exploring 300 1.0
     DONE
     SIGNAL exploring
-    REPEAT 3
-        MOVE RANDOM 0.8 -1 -0.3 0.4 0.8
-        CONTINUE 5
-    DONE
+    CONTINUE 5
+    MOVE 0.8 -1 0.4
     UNSIGNAL exploring
+    UNTIL shape_a
+        MOVE 0.1 1.0 0.2
+    DONE
+    STOP
 DONE

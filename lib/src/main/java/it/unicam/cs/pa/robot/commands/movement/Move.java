@@ -41,6 +41,5 @@ public record Move(Position direction, double speed) implements MovementCommand 
     public void execute(Environment environment, Robot robot) {
         robot.setSpeed(this.speed);
         robot.setDirection(this.direction);
-        System.out.printf("MOVE => Robot %s is moving towards position %s at speed %s%n", robot, this.direction, this.speed);
     }
 }

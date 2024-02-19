@@ -43,6 +43,5 @@ public record MoveRandom(Position position1, Position position2, double speed) i
         Position direction = Position.random(position1, position2);
         robot.setSpeed(this.speed);
         robot.setDirection(direction);
-        System.out.printf("MOVE RANDOM => Robot %s is moving towards position %s at speed %s%n", robot, direction, this.speed);
     }
 }

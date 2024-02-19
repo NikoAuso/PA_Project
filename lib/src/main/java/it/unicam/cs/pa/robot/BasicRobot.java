@@ -145,7 +145,8 @@ public class BasicRobot implements Robot {
     @Override
     public void pushLoopCount(int count, int index) {
         if (!this.startingLoopIndices.isEmpty() && this.startingLoopIndices.contains(index))
-            this.loopCounts.push(count);
+            if(this.loopCounts.size() < this.startingLoopIndices.size())
+                this.loopCounts.push(count);
     }
 
     @Override
