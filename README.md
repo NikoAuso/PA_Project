@@ -8,23 +8,23 @@ Una libreria Java che consente la simulazione di uno _sciame di robot_ che si mu
 
 ## Descrizione
 
-Il progetto realizza una libreria per simulare uno sciame di robot, che si muovono in uno spazio che può contenere degli
-ostacoli, ovvero delle figure circolari o rettangolari. L'ambiente di movimento ha dimensioni illimitate.
+Il progetto realizza una libreria per simulare uno sciame di robot, che si muovono in uno spazio di dimensioni infinite
+che può contenere degli ostacoli, ovvero figure posizionate in esso di forma circolari o rettangolari.
 
 Nel progetto è inoltre presente una GUI che permette di osservare l'evoluzione della simulazione. L'utente può inserire
-file di configurazione sia per l'ambiente che per i comandi dei robot.
+file di configurazione sia per l'ambiente che per i comandi dei robot. La GUI permette inoltre di osservare l'evoluzione
+passo-passo o con un avanzamento automatico
 
-Esempi di file di configurazione si trovano tra le risorse
-dell'applicazione, sotto la cartella ***resources*** dell'applicazione (
-app/src/main/resources/it/unicam/cs/pa/app/files/example_*.txt).
+Esempi di file di configurazione si trovano tra le risorse dell'applicazione, sotto la cartella ***resources*** del
+modulo *app* (app/src/main/resources/it/unicam/cs/pa/app/files/example_*.txt).
 
 ## Responsabilità
 
 ### Ambiente
 
-1. **Creazione di forme geometriche**: la creazione di forme geometriche è assegnata all'interfaccia ***ShapeFactory***,
-   che crea delle ***Shape*** come ***Circle*** e ***Rectangle*** utilizzando gli argomenti passati all'interno di un
-   array di elementi di tipo double;
+1. **Creazione di forme geometriche**: la creazione di forme geometriche è assegnata alle istanze dell'interfaccia
+   ***ShapeFactory***, che crea delle ***Shape*** come ***Circle*** e ***Rectangle*** utilizzando gli argomenti passati
+   all'interno di un array di elementi di tipo double;
 2. **Gestione dell'ambiente**: la gestione dell'ambiente è affidata alla classe ***Environment***, che rappresenta
    l'ambiente in cui operano i robot, mantenendo traccia delle forme geometriche e dei robot presenti;
 3. **Parsing del file di configurazione dell'ambiente**: il parsing del file di configurazione dell'ambiente è affidato
@@ -68,8 +68,8 @@ una lista di posizioni.
    ***SimulatorController*** che gestisce la logica della simulazione, coordinando l'interazione tra l'ambiente, i
    robot e i comandi eseguiti. Permette l'esecuzione di un passo della simulazione, eseguendo i comandi per ogni robot
    nell'ambiente. Durante ogni passo, per ogni robot viene selezionato il comando giusto in base all'indice del comando
-   registrato dal robot in `currentCommandIndex`. Ad ogni passo viene notificata l'interfaccia di simulazione per
-   aggiornare la visualizzazione.
+   registrato dal robot in `currentCommandIndex`. Ad ogni passo viene notificata la GUI di simulazione per
+   aggiornare la visualizzazione con lo stato corrente dei robot.
 
 L'interfaccia ***Simulator***, implementata dal controller della GUI, permette l'esecuzione della simulazione automatica
 impostando un tempo totale di esecuzione e un tempo di esecuzione di ogni passo.
@@ -93,5 +93,5 @@ Per avviare la simulazione è sufficiente eseguire da terminale i comandi:
 
 Successivamente, premendo i pulsanti ***Load shape*** e ***Load program*** è possibile caricare i file di
 configurazione.
-Degli esempi di utilizzo si possono trovare nella la cartella ***resources*** dell'applicazione
-(app/src/main/resources/it/unicam/cs/pa/app/files/example_*.txt).
+Degli esempi di utilizzo si possono trovare nella la cartella ***resources*** dell'applicazione:
+<code> app/src/main/resources/it/unicam/cs/pa/app/files/example_*.txt </code>
